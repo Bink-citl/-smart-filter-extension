@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>隐私政策 · Smart Filter</title>
+<meta name="description" content="Smart Filter 隐私政策：默认本地处理，不上传候选人数据">
+<style>:root{--bg:#ffffff;--fg:#1f2430;--mut:#5b6472;--line:#e3e6ec;--card:#f6f7f9;--acc:#185FA5}
+@media (prefers-color-scheme: dark){
+ :root{--bg:#0f1420;--fg:#e8ecf3;--mut:#9aa4b5;--line:#2a3243;--card:#171e2c;--acc:#7fb3e8}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.75 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:860px;margin:0 auto;padding:40px 20px 80px}
+h1{font-size:26px;margin:.2em 0 .8em}
+h2{font-size:19px;margin:2em 0 .6em;padding-bottom:.3em;border-bottom:1px solid var(--line)}
+h3{font-size:16px;margin:1.4em 0 .5em}
+a{color:var(--acc)}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--card)}
+code{background:var(--card);padding:1px 5px;border-radius:4px;font-size:13px}
+blockquote{border-left:3px solid var(--acc);margin:1em 0;padding:.2em 1em;color:var(--mut);background:var(--card)}
+.meta{color:var(--mut);font-size:13px}
+.top{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--line);padding-bottom:14px;margin-bottom:26px}
+.top b{font-size:17px}
+footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:var(--mut);font-size:13px}</style>
+</head>
+<body>
+<main>
+<div class="top"><b>Smart Filter</b><span><a href="./">返回项目主页</a></span></div>
+
+<p><strong>生效日期</strong>：2026-11-08 ｜ <strong>适用版本</strong>：Smart Filter 3.6.0
+<strong>联系渠道</strong>：GitHub 仓库 <a href="https://github.com/Bink-citl/SmartFilter-extension/security/advisories/new">Security → Report a vulnerability</a> 或 <a href="https://github.com/Bink-citl/SmartFilter-extension/discussions">Discussions</a></p>
+<p>本页可发布到 GitHub Pages 后作为 Chrome 网上应用店的「隐私政策 URL」，也可作为企业法务/安全评审材料。</p>
+<h2>1. 我们收集什么</h2>
+<h3>1.1 默认模式（无需账号、无服务端）</h3>
+<p>扩展在<strong>您的浏览器本机</strong>处理并保存：</p>
+<table>
+<thead>
+<tr>
+<th>数据</th>
+<th>来源</th>
+<th>存放位置</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>岗位描述与筛选条件</td>
+<td>您手动输入，或从招聘页面读取您正在查看的职位</td>
+<td><code>chrome.storage.local</code> / IndexedDB</td>
+<td>生成匹配评分</td>
+</tr>
+<tr>
+<td>候选人卡片信息与在线简历文本</td>
+<td>您主动启用功能时从招聘页面读取</td>
+<td>本机</td>
+<td>匹配判定、生成决定记录</td>
+</tr>
+<tr>
+<td>简历文件（PDF / DOCX / 图片）</td>
+<td>您主动下载或拖入</td>
+<td>本机 + 您指定的本地文件夹</td>
+<td>解析、命名、归档</td>
+</tr>
+<tr>
+<td>决定记录、运行记录、评测样本</td>
+<td>扩展运行产生</td>
+<td>本机</td>
+<td>审计、统计、规则评测</td>
+</tr>
+<tr>
+<td>设置与话术模板</td>
+<td>您填写</td>
+<td>本机</td>
+<td>功能配置</td>
+</tr>
+</tbody>
+</table>
+<p><strong>项目维护者不运营任何服务端，无法访问、也不会接收上述数据。</strong></p>
+<p>仓库内 <code>data/preset-backup.json</code> 为<strong>虚构示例数据</strong>（示例公司「示例科技（Example Tech）」+ 26 个示例岗位），不含任何真实个人信息。</p>
+<h3>1.2 可选：AI 判断（默认关闭）</h3>
+<p>在设置中主动开启并自行填写第三方接口与密钥后，扩展会把<strong>岗位说明与简历文本片段</strong>直接发送到<strong>您配置的端点</strong>：</p>
+<ul>
+<li>发送前按代码逻辑去除姓名、手机号、座机、邮箱、微信号、身份证号；请自行验证效果。</li>
+<li>端点、密钥与每日调用上限由您控制；维护者不经手、不存储、不代理。</li>
+<li>关闭后全部本地功能仍可用。</li>
+<li>商店「数据使用声明」须如实勾选「用户提供的文本会传输至用户自配的第三方端点」，<strong>不得</strong>勾选「不收集任何数据」。</li>
+</ul>
+<h3>1.3 可选：本机 RPA 助手（默认不安装）</h3>
+<p>自动化执行能力依赖一个<strong>由用户手动安装、仅监听 <code>127.0.0.1</code></strong> 的本地 Python 助手：</p>
+<ul>
+<li>通过本机回环端口（默认 17861）接收本扩展指令，校验自定义请求头与扩展来源，不对外网开放。</li>
+<li>安装脚本写入当前用户开机启动项（<code>HKCU\...\Run</code>），以无窗口方式后台运行；<code>stop_rpa_helper.py</code> 与 <code>remove_autostart.py</code> 可随时停止并取消自启。</li>
+<li>在本机模拟鼠标/键盘操作，作用范围限于您指定的招聘网站标签页；日志写入本机 <code>rpa-helper.log</code>。</li>
+<li>助手不上传数据。企业环境请先经 IT / 安全部门评估（开机自启 + 本地监听端口 + 输入模拟属常见受管控行为）。</li>
+</ul>
+<h3>1.4 页面内脚本注入</h3>
+<p>内容脚本在招聘站点读取页面文本并展示浮层；其中一项能力在页面主环境（<code>MAIN</code> world）临时接管 <code>window.open</code> 与链接点击，把新标签地址交给扩展后台打开。该行为仅在您主动触发职位抓取期间启用，不修改页面持久化数据，不读取与功能无关的内容。</p>
+<h2>2. 使用目的</h2>
+<p><strong>单一用途</strong>：辅助招聘人员完成简历筛选与决策留痕。数据用于本地解析与匹配、生成可解释决定记录、生成您主动请求的报表与导出、以及您主动启用的自动化操作。不用于广告、画像、模型训练或任何无关目的。</p>
+<h2>3. 共享与披露</h2>
+<p>不出售、不出租、不与任何第三方共享。维护者不持有您的数据，若收到法律要求也因不持有而无法提供。</p>
+<h2>4. 存储、保留与删除</h2>
+<table>
+<thead>
+<tr>
+<th>数据</th>
+<th>默认保留</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>运行记录</td>
+<td>7 天</td>
+</tr>
+<tr>
+<td>自动决定明细</td>
+<td>90 天</td>
+</tr>
+<tr>
+<td>月度汇总（仅数字）</td>
+<td>3 年</td>
+</tr>
+<tr>
+<td>不合适 / 未沟通候选人</td>
+<td>180 天</td>
+</tr>
+<tr>
+<td>已收简历未面试</td>
+<td>1 年</td>
+</tr>
+<tr>
+<td>面试 / 录用</td>
+<td>不自动删</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>存储位置：安装扩展的浏览器本地配置与您指定的本地文件夹。</li>
+<li>提供全量加密备份（<code>.sfbak</code>）与恢复，以及「按要求删除」一次性清除某候选人在扩展内的全部信息。</li>
+<li>卸载扩展会清除本机全部数据，请先备份。</li>
+<li>评测样本采集可在设置中关闭，导出前二次去标识。</li>
+</ul>
+<h2>5. 权限说明（与 manifest.json 逐项对应）</h2>
+<table>
+<thead>
+<tr>
+<th>权限</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>storage</code> / <code>unlimitedStorage</code></td>
+<td>本地保存岗位、候选人、设置、决定记录与简历元数据</td>
+</tr>
+<tr>
+<td><code>downloads</code></td>
+<td>导出报表与按规则命名保存简历</td>
+</tr>
+<tr>
+<td><code>tabs</code> / <code>scripting</code></td>
+<td>定位招聘网站标签页并注入浮层与读取脚本</td>
+</tr>
+<tr>
+<td><code>alarms</code></td>
+<td>计划任务与保留期限每日检查</td>
+</tr>
+<tr>
+<td><code>offscreen</code></td>
+<td>在离屏文档解析 PDF 文本</td>
+</tr>
+<tr>
+<td><code>debugger</code></td>
+<td>在部分执行模式下通过 CDP <code>Input</code> 域发送真实鼠标事件</td>
+</tr>
+<tr>
+<td><code>management</code></td>
+<td>查找/唤起配套工作台扩展（标识见 <code>docs/OPEN_SOURCE_NOTE.md</code>）</td>
+</tr>
+<tr>
+<td><code>host_permissions</code>（招聘站域名）</td>
+<td>仅在这些站点读取页面内容</td>
+</tr>
+<tr>
+<td><code>http://127.0.0.1/*</code></td>
+<td>与本机 RPA 助手回环通信</td>
+</tr>
+<tr>
+<td><code>optional_host_permissions</code></td>
+<td>仅当您主动授权自定义 AI / 配置端点时按需申请</td>
+</tr>
+</tbody>
+</table>
+<p>逐项提审理由见 <code>PERMISSION_JUSTIFICATION.md</code>。</p>
+<h2>6. 自动化决策与人在回路</h2>
+<ul>
+<li>评分与判定为<strong>辅助建议</strong>，输出逐项依据（命中条件、规则版本、判定原因），可人工复核。</li>
+<li>不合格默认进入「待确认」，由 HR 确认后才执行后续动作；不自动作出淘汰决定。</li>
+<li>每判定一人生成一条可导出的决定记录，便于申诉与审计。</li>
+<li>评分维度不含性别、年龄、婚育、民族、宗教、籍贯等受保护属性；示例数据不预置年龄与第一学历硬门槛。使用者若自行配置，需自行承担合规责任。</li>
+<li>最终录用决定必须由人工作出。详见 <code>MODEL_CARD.md</code>。</li>
+</ul>
+<h2>7. 儿童隐私</h2>
+<p>面向企业招聘人员，不面向儿童。</p>
+<h2>8. 您的权利</h2>
+<p>可随时查看、导出、修改、删除本机全部数据；卸载即可清除。隐私疑问请通过上述渠道联系。</p>
+<h2>9. 政策变更</h2>
+<p>数据处理方式发生变化时，会在新版本中显著提示并更新本页生效日期后再发布，不在静默更新中改变数据实践。</p>
+<h2>10. 商店提交自检</h2>
+<ul>
+<li>[ ] 第 1.2 / 1.3 / 1.4 节与最终代码一致</li>
+<li>[ ] 第 5 节与 <code>manifest.json</code> 完全一致</li>
+<li>[ ] 商店「单一用途」与第 2 节一致</li>
+<li>[ ] 商店「数据使用声明」已如实申报 AI 文本传输</li>
+<li>[ ] 本页 URL 可匿名访问</li>
+<li>[ ] 截图与 demo 不含真实候选人、公司名或薪资</li>
+</ul>
+<footer>Smart Filter · MIT License · <a href="https://github.com/Bink-citl/SmartFilter-extension">github.com/Bink-citl/SmartFilter-extension</a> · 本页由 docs/PRIVACY.md 生成（<code>build-pages.py</code>），内容以 Markdown 源文件为准。</footer>
+</main>
+</body>
+</html>

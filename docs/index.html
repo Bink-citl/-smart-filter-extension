@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Filter · 本地优先的简历筛选与决策审计</title>
+<meta name="description" content="开源 Chrome 扩展：本地解析简历、可解释评分、每次判定留痕。无需账号、不上传数据、离线可用。">
+<style>
+:root{--bg:#ffffff;--fg:#1f2430;--mut:#5b6472;--line:#e3e6ec;--card:#f6f7f9;--acc:#185FA5;--acc2:#0F6E56;--warn:#993C1D}
+@media (prefers-color-scheme: dark){
+ :root{--bg:#0f1420;--fg:#e8ecf3;--mut:#9aa4b5;--line:#2a3243;--card:#171e2c;--acc:#7fb3e8;--acc2:#5dcaa5;--warn:#f0997b}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.75 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:960px;margin:0 auto;padding:0 20px}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
+.logo{font-weight:600;font-size:17px;letter-spacing:.2px}
+nav a{color:var(--mut);text-decoration:none;margin-left:22px;font-size:14px}
+nav a:hover{color:var(--fg)}
+.hero{text-align:center;padding:64px 0 40px}
+.hero h1{font-size:34px;margin:0 0 14px;line-height:1.3}
+.hero p.sub{color:var(--mut);font-size:17px;max-width:640px;margin:0 auto 30px}
+.badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:34px}
+.badge{font-size:12.5px;color:var(--mut);border:1px solid var(--line);background:var(--card);border-radius:99px;padding:4px 13px}
+.btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-block;padding:11px 26px;border-radius:9px;font-size:15px;text-decoration:none;font-weight:500;border:1px solid var(--line);color:var(--fg);background:var(--card)}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+h2{font-size:22px;margin:0 0 8px}
+section{padding:44px 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+.lead{color:var(--mut);margin:0 0 26px;font-size:15px}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.shots figure{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.shots img{display:block;width:100%;height:auto}
+.shots figcaption{padding:10px 14px;font-size:13px;color:var(--mut)}
+@media (max-width:700px){.shots{grid-template-columns:1fr}}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.steps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.steps li::before{content:counter(s);flex:0 0 30px;height:30px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500}
+.steps b{display:block;margin-bottom:2px}
+.steps span{color:var(--mut);font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:700px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
+.card b{display:block;margin-bottom:6px;font-size:15px}
+.card p{margin:0;color:var(--mut);font-size:13.5px;line-height:1.65}
+.notice{border-left:3px solid var(--warn);background:var(--card);border-radius:0 10px 10px 0;padding:14px 18px;font-size:14px;color:var(--mut);margin-top:22px}
+.notice b{color:var(--fg)}
+footer{border-top:1px solid var(--line);padding:26px 0 60px;color:var(--mut);font-size:13.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+footer a{color:var(--acc);text-decoration:none}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="logo">Smart Filter</div>
+  <nav>
+    <a href="#shots">界面</a>
+    <a href="#start">30 秒上手</a>
+    <a href="#features">能力</a>
+    <a data-repo href="https://github.com/Bink-citl/SmartFilter-extension">GitHub</a>
+    <a href="./privacy.html">隐私政策</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>简历不出本机的<br>智能筛选与决策审计工具</h1>
+  <p class="sub">开源 Chrome 扩展：本地解析简历、逐项可解释评分、每次自动判定留痕可复核。没有服务端、不需要账号、离线可用。</p>
+  <div class="badges">
+    <span class="badge">MIT 开源</span>
+    <span class="badge">Manifest V3</span>
+    <span class="badge">数据仅存本机</span>
+    <span class="badge">无需构建</span>
+    <span class="badge">v3.6.0</span>
+  </div>
+  <div class="btns">
+    <a class="btn primary" data-repo-latest href="#">⬇ 下载最新版</a>
+    <a class="btn" data-repo href="https://github.com/Bink-citl/SmartFilter-extension">查看源码</a>
+  </div>
+</div>
+
+<section id="shots">
+  <h2>界面一览</h2>
+  <p class="lead">内置 26 个虚构示例岗位，装上 1 分钟即可看到完整流程，无需任何配置。</p>
+  <div class="shots">
+    <figure>
+      <img src="./screenshots/dashboard-job-list.png" alt="岗位列表界面：左侧功能导航，右侧示例岗位列表" loading="lazy">
+      <figcaption>岗位管理 — 按 JD 配置硬性要求、加分项与匹配规则</figcaption>
+    </figure>
+    <figure>
+      <img src="./screenshots/settings-runlog.png" alt="运行记录界面：每一次自动操作的详细日志" loading="lazy">
+      <figcaption>运行记录 — 每一个动作的结果与原因，可导出 CSV 审计</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="start">
+  <h2>30 秒上手</h2>
+  <p class="lead">不需要 Node、不需要构建、不需要注册任何账号。</p>
+  <ol class="steps">
+    <li><div><b>下载</b><span>从 GitHub Releases 下载最新 zip 并解压</span></div></li>
+    <li><div><b>打开扩展页</b><span>Chrome 地址栏输入 <code>chrome://extensions</code>（Edge 为 <code>edge://extensions</code>），打开右上角「开发者模式」</span></div></li>
+    <li><div><b>加载</b><span>点「加载已解压的扩展程序」，选择含 <code>manifest.json</code> 的目录</span></div></li>
+    <li><div><b>导入示例</b><span>打开工作台 → 「导入内置岗位」→ 立即看到 26 个示例岗位与完整评分流程</span></div></li>
+  </ol>
+</section>
+
+<section id="features">
+  <h2>核心能力</h2>
+  <p class="lead">定位是辅助决策，不是替代招聘人员的判断。</p>
+  <div class="cards">
+    <div class="card"><b>本地优先</b><p>解析、评分、存储全部在浏览器内完成。项目不运营任何服务端，维护者无法接触您的数据。</p></div>
+    <div class="card"><b>多格式解析</b><p>PDF（含扫描件 OCR）、DOCX、招聘页面在线简历，全部本地处理。</p></div>
+    <div class="card"><b>可解释评分</b><p>逐项展示命中与未命中的条件及规则版本，答得出「为什么淘汰 A 留 B」。</p></div>
+    <div class="card"><b>决策审计</b><p>每次自动判定生成决定记录，不合格默认先由人工确认，可设保留期限、可按请求删除。</p></div>
+    <div class="card"><b>评测集回归</b><p>漏打率 / 误打率可测，规则改动可回归验证，避免「改一条规则，坏一片结果」。</p></div>
+    <div class="card"><b>供应链可审计</b><p>28 个第三方文件逐个登记来源与 SHA256，CI 每次推送全量校验。</p></div>
+  </div>
+  <div class="notice">
+    <b>边界说明：</b>本工具仅提供辅助建议，不构成录用或淘汰决定，最终决策须由招聘人员人工复核。评分维度不包含性别、年龄、婚育、民族、宗教、籍贯等受保护属性。
+  </div>
+</section>
+
+<section>
+  <h2>文档</h2>
+  <div class="cards">
+    <div class="card"><b>隐私政策</b><p><a href="./privacy.html">privacy.html</a> — 可直接作为浏览器商店的隐私政策 URL。</p></div>
+    <div class="card"><b>模型卡</b><p>评分维度设计、受保护属性排除、已知局限。</p></div>
+    <div class="card"><b>企业部署</b><p>全量加密备份、离线部署、组策略分发。</p></div>
+  </div>
+</section>
+
+<footer>
+  <span>Smart Filter · 以 <a data-repo href="#">MIT</a> 许可证开源</span>
+  <span><a data-repo-issues href="#">提交 Issue</a> · <a data-repo-discussions href="#"> Discussions</a></span>
+</footer>
+</main>
+
+<script>
+/* 仓库改名后只需改这一行 */
+const REPO = "Bink-citl/SmartFilter-extension";const R = "https://github.com/" + REPO;
+document.querySelectorAll("[data-repo]").forEach(a => a.href = R);
+document.querySelectorAll("[data-repo-latest]").forEach(a => a.href = R + "/releases/latest");
+document.querySelectorAll("[data-repo-issues]").forEach(a => a.href = R + "/issues/new/choose");
+document.querySelectorAll("[data-repo-discussions]").forEach(a => a.href = R + "/discussions");
+</script>
+</body>
+</html>
