@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<script src="../ui/theme-init.js"></script>
+<title>Smart Filter · 人才库与分析</title>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font:14px/1.7 "Microsoft YaHei",system-ui,sans-serif;color:var(--text);background:var(--bg);}
+  .wrap{max-width:var(--page-max);margin:0 auto;padding:20px 16px 60px;}
+  header{display:flex;align-items:center;gap:12px;padding:10px 0 16px;}
+  header img{width:38px;height:38px;border-radius:var(--r-md);}
+  header h1{font-size:var(--fs-xl);margin:0;}
+  .headbtns{margin-left:auto;display:flex;gap:8px;}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px;}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px;}
+  .stat b{display:block;font-size:var(--fs-2xl);}
+  .stat span{font-size:var(--fs-sm);color:var(--text-2);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px;}
+  .card h3{margin:0 0 8px;font-size:var(--fs-lg);color:var(--text);}
+  .chart{width:100%;height:240px;}
+  .upload{display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed var(--field);border-radius:var(--r-lg);padding:30px;cursor:pointer;transition:.2s;text-align:center;background:var(--surface-2);}
+  .upload:hover,.upload.drag{border-color:var(--info);background:var(--info-50);}
+  .upload .ic{font-size:var(--fs-2xl);}
+  .upload .hint{font-size:var(--fs-sm);color:var(--muted);margin-top:6px;}
+  .result{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:12px;font-size:var(--fs-md);margin-top:10px;}
+  .result table{width:100%;border-collapse:collapse;}
+  .result td,.result th{padding:5px 8px;border-bottom:1px solid var(--line-2);text-align:left;font-size:var(--fs-sm);}
+  .result th{color:var(--text-2);}
+  .verdict{display:inline-block;padding:1px 10px;border-radius:var(--r-md);font-size:var(--fs-sm);font-weight:600;}
+  .v-pass{background:var(--ok-50);color:var(--ok-700);}
+  .v-reject{background:var(--bad-50);color:var(--bad-700);}
+  .v-review{background:var(--warn-50);color:var(--warn-700);}
+  .badge{display:inline-block;padding:1px 10px;border-radius:var(--r-md);font-size:var(--fs-sm);font-weight:600;}
+  .badge-ok{background:var(--ok-50);color:var(--ok-700);}
+  .badge-no{background:var(--bad-50);color:var(--bad-700);}
+  .badge-warn{background:var(--warn-50);color:var(--warn-700);}
+  .filters{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center;}
+  .filters select,.filters input{padding:7px 10px;border:1px solid var(--field);border-radius:var(--r-md);font-size:var(--fs-md);}
+  .filters input{flex:1;min-width:160px;}
+  .tbl{width:100%;border-collapse:collapse;background:var(--surface);font-size:var(--fs-md);}
+  .tbl th{background:var(--surface-2);color:var(--text-2);font-size:var(--fs-sm);position:sticky;top:0;}
+  .tbl th,.tbl td{padding:9px 10px;border-bottom:1px solid var(--line-2);text-align:left;}
+  .tbl tr{cursor:pointer;}
+  .tbl tr:hover{background:var(--surface-2);}
+  .drawer{position:fixed;right:0;top:0;bottom:0;width:480px;max-width:92vw;background:var(--surface);box-shadow:-8px 0 30px rgba(0,0,0,.15);z-index:100;overflow:auto;padding:18px;display:none;}
+  .drawer.open{display:block;}
+  .drawer h3{margin:0 0 10px;}
+  .kv{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+  .kv span{font-size:var(--fs-sm);background:var(--info-50);color:var(--info-700);padding:3px 10px;border-radius:var(--r-md);}
+  .kvbox{background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r-md);padding:8px 10px;font-size:var(--fs-sm);}
+  .kvbox b{display:block;font-size:var(--fs-xs);color:var(--text-2);font-weight:400;margin-bottom:2px;}
+  .sect{font-size:var(--fs-md);font-weight:600;color:var(--text);margin:14px 0 6px;border-left:3px solid var(--info);padding-left:8px;}
+  .dc-act{display:flex;gap:8px;flex-wrap:wrap;}
+  .dc-out{margin-top:8px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;}
+  .dc-out[hidden]{display:none;}
+  .dc-out textarea{width:100%;min-height:180px;font-size:var(--fs-sm);line-height:1.6;padding:8px;border:1px solid var(--field);border-radius:var(--r-sm);background:var(--surface-2);color:var(--text);}
+  .dc-apps{width:100%;border-collapse:collapse;font-size:var(--fs-sm);}
+  .dc-apps th,.dc-apps td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:left;}
+  .dc-apps th{color:var(--text-2);font-weight:600;}
+  .msg{background:var(--surface-2);border-radius:var(--r-md);padding:8px 10px;font-size:var(--fs-sm);margin:4px 0;line-height:1.6;}
+  .msg.out{border-left:3px solid var(--info);} .msg.in{border-left:3px solid var(--muted);}
+  .miniBtn{cursor:pointer;}
+  .raw{background:var(--overlay);color:var(--field);font:12px/1.6 Consolas,monospace;padding:12px;border-radius:var(--r-md);max-height:300px;overflow:auto;white-space:pre-wrap;}
+  .close{float:right;border:none;background:var(--bg);border-radius:var(--r-md);padding:4px 12px;cursor:pointer;}
+  .note{background:var(--warn-50);border:1px solid var(--warn-200);border-radius:var(--r-md);padding:8px 12px;font-size:var(--fs-sm);color:var(--warn-700);margin-bottom:12px;}
+  @media (max-width:960px){.grid2,.grid3{grid-template-columns:1fr;}}
+</style>
+<link rel="stylesheet" href="../ui/tokens.css">
+<link rel="stylesheet" href="../ui/components.css">
+<link rel="stylesheet" href="../ui/theme.css">
+</head>
+<body class="hrs-dash">
+<div class="wrap">
+  <header>
+    <img src="../icons/logo-mark.svg" alt="Smart Filter">
+    <h1><span class="muted sf-word">Smart <em>Filter</em></span><i>/</i>人才库与分析 <span id="verTag" style="font-size:var(--fs-xs);padding:0 6px;font-weight:400;"></span></h1>
+    <div class="headbtns">
+      <button class="btn ghost" id="btnExportPDF">导出PDF</button>
+      <button class="btn ghost" id="btnExportDocx">导出Word</button>
+      <button class="btn ghost" id="btnExport">按设置导出</button>
+      <button class="btn ghost" id="btnExportPool" data-tip="合格和待复核候选人导出成 Excel，每个岗位一个工作表">导出清单 Excel</button>
+      <span class="sep"></span>
+      <button class="btn ghost" id="btnRefresh">刷新</button>
+      <button class="btn ghost" id="btnOpts">设置</button>
+    </div>
+  </header>
+
+  <div class="note" id="jdNote" style="display:none;"></div>
+
+
+  <div class="dtabs" id="dtabs"><span data-dp="pool" class="on">候选人</span><span data-dp="parse">简历解析</span><span data-dp="today">今日工作</span><span data-dp="analysis">数据分析</span></div>
+
+  <!-- v1.9.17 今日智选 / 打招呼：扫 · 过 · 拒，点数字看明细 -->
+  <div class="dpanel" data-dp="today">
+  <div class="card" id="todayCard" style="margin-bottom:12px;">
+    <h3>今日工作（Boss + 猎聘，试运行也计入）</h3>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:var(--fs-md);" id="todayStats"></div>
+    <div id="todayList" style="display:none;margin-top:10px;max-height:360px;overflow:auto;"></div>
+  </div>
+
+  </div>
+
+  <div class="dpanel on" data-dp="pool">
+  <div class="stats">
+    <div class="stat"><b id="stTotal">-</b><span>人才库总数</span></div>
+    <div class="stat"><b id="stToday">-</b><span>今日处理</span></div>
+    <div class="stat"><b id="stPass">-</b><span>通过人数</span></div>
+    <div class="stat"><b id="stReview">-</b><span>待复核</span></div>
+    <div class="stat"><b id="stReject">-</b><span>今日拒绝</span></div>
+  </div>
+  <div class="card" style="margin-bottom:12px;">
+    <h3>人才库（合格 / 待复核候选人）</h3>
+    <div class="filters">
+      <select id="fJd"><option value="">全部岗位</option></select>
+      <select id="fVerdict">
+        <option value="">全部判定</option>
+        <option value="pass">通过</option>
+        <option value="review">待复核</option>
+        <option value="reject">拒绝(已入库)</option>
+      </select>
+      <select id="fReason">
+        <option value="">全部拒绝原因</option>
+        <option value="未满足学历">未满足学历</option>
+        <option value="经验不足">经验不足</option>
+        <option value="薪资不符">薪资不符</option>
+        <option value="跨岗位">跨岗位</option>
+        <option value="技能不匹配">技能不匹配</option>
+        <option value="其他">其他</option>
+      </select>
+      <select id="fSource">
+        <option value="">全部来源</option>
+        <option value="boss">Boss直聘</option>
+        <option value="liepin">猎聘</option>
+        <option value="upload">手动上传</option>
+      </select>
+      <select id="fStatus">
+        <option value="">全部状态</option>
+        <option value="new">新获取</option>
+        <option value="contacted">已联系</option>
+        <option value="interview">已约面</option>
+        <option value="offer">已发Offer</option>
+        <option value="rejected">已淘汰</option>
+        <option value="reject_pending">待确认拒绝</option>
+        <option value="review">待复核</option>
+      </select>
+      <input id="fSearch" placeholder="搜索姓名/技能/公司…">
+      <span id="tblCount" style="font-size:var(--fs-sm);color:var(--muted);"></span>
+    </div>
+    <div style="max-height:520px;overflow:auto;">
+      <table class="tbl">
+        <thead><tr>
+          <th>姓名</th><th>性别</th><th>年龄</th><th>联系方式</th><th>来源</th><th>匹配JD</th><th>得分</th><th>判定</th><th>拒绝归类</th><th>状态</th><th>时间</th><th>操作</th>
+        </tr></thead>
+        <tbody id="tblBody" data-sk="tr:8x12"></tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+  </div>
+
+  <div class="dpanel" data-dp="parse">
+  <div class="grid2" style="margin-bottom:16px;">
+    <div class="card">
+      <h3>上传简历解析（PDF / Word / 文本 / 图片）</h3>
+      <div class="upload" id="drop">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M12 11v6M9.5 13.5 12 11l2.5 2.5"/></svg></div>
+        <div style="font-weight:600;">点击选择或拖拽文件到此处</div>
+        <div class="hint">支持 .pdf .docx .txt .png .jpg .webp，图片将本地OCR识别（中文+英文）</div>
+        <input type="file" id="file" accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg,.webp,.bmp" style="display:none;" multiple>
+      </div>
+      <div class="result" id="upResult" style="display:none;"></div>
+    </div>
+    <div class="card">
+      <h3>上传解析 · 与JD匹配</h3>
+      <div id="matchBox" style="font-size:var(--fs-md);color:var(--muted);">上传简历后，这里会给出与当前JD的匹配评分与判定。</div>
+      <div style="margin-top:12px;display:flex;gap:8px;">
+        <button class="btn ghost" id="btnAddPool" style="display:none;">加入人才库</button>
+        <button class="btn ghost" id="btnCopyText" style="display:none;">复制全文</button>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <!-- v2.2.2 招聘分析：周期 / 平台 / 岗位 → 核心指标 → 趋势与漏斗 → 岗位漏斗 → 渠道对比 → 人才质量 → 名单，右上角导出周报月报 -->
+  <div class="dpanel" data-dp="analysis">
+  <div class="rp-bar">
+    <div class="rp-seg" id="rpPeriod"><span data-p="week" class="on">本周</span><span data-p="lastweek">上周</span><span data-p="month">本月</span><span data-p="lastmonth">上月</span><span data-p="d30">近 30 天</span></div>
+    <div class="rp-seg" id="rpSite"><span data-s="" class="on">全部平台</span><span data-s="boss">Boss直聘</span><span data-s="liepin">猎聘</span></div>
+    <select id="rpJd"><option value="">全部岗位</option></select>
+    <span class="rp-range num" id="rpRange"></span>
+    <span class="rp-sp"></span>
+    <button class="btn ghost" id="rpXlsx" data-tip="核心指标、岗位漏斗、渠道对比、每日明细、本期候选人，一个 Excel 多个工作表">导出数据 Excel</button>
+    <button class="btn" id="rpDocx" data-tip="按当前周期、平台、岗位生成 Word 报告，含图表和候选人名单，保存到「下载/HR招聘报表」">导出周报 Word</button>
+  </div>
+  <p class="rp-summary" id="rpSummary"></p>
+  <div class="rp-card rp-emptyall" id="rpEmptyAll" hidden></div>
+  <section class="rp-kpis" id="rpKpis" data-sk="kpi:7"></section>
+
+  <div class="rp-grid g-trend">
+    <section class="rp-card"><div class="rp-hd"><b>每日趋势</b><em>打招呼、筛选人数和其中合格的人数</em></div><div class="chart rp-ch" id="rpTrend"></div></section>
+    <section class="rp-card"><div class="rp-hd"><b>招聘漏斗</b><em>本期进入人才库的候选人走到了哪一步</em></div><div class="chart rp-ch" id="rpFunnel"></div></section>
+  </div>
+
+  <section class="rp-card"><div class="rp-hd"><b>岗位招聘漏斗</b><em>每一格下面是占本岗位筛选人数的比例</em></div><div id="rpJdFunnel" data-sk="block"></div></section>
+
+  <div class="rp-grid g-half">
+    <section class="rp-card"><div class="rp-hd"><b>渠道对比</b><em>同一周期 Boss直聘 和 猎聘 各项指标，深色一边更好</em></div><div id="rpChannel" data-sk="block"></div></section>
+    <section class="rp-card"><div class="rp-hd"><b>不合格原因</b><em>本期被判不合格的主要原因</em></div><div class="chart rp-ch sm" id="rpReason"></div><div class="rp-empty" id="rpReasonEmpty" style="display:none;">本期没有不合格记录</div></section>
+  </div>
+
+  <section class="rp-card"><div class="rp-hd"><b>本期人才清单</b><em id="rpListN"></em><span class="rp-sp"></span><button class="btn ghost sm" id="rpPool" data-tip="人才库里全部合格和待复核的候选人，每个岗位一个工作表">导出人才库清单</button></div><div id="rpList"></div></section>
+
+  <h2 class="rp-h">人才质量<em>人才库全部候选人，不随上面的周期变化</em></h2>
+  <div class="rp-grid g-3">
+    <section class="rp-card"><div class="rp-hd"><b>匹配分分布</b></div><div class="chart" id="chScore"></div></section>
+    <section class="rp-card"><div class="rp-hd"><b>学历分布</b></div><div class="chart" id="chEdu"></div></section>
+    <section class="rp-card"><div class="rp-hd"><b>经验年限</b></div><div class="chart" id="chExp"></div></section>
+    <section class="rp-card"><div class="rp-hd"><b>来源分布</b></div><div class="chart" id="chSrc"></div></section>
+    <section class="rp-card"><div class="rp-hd"><b>判定占比</b></div><div class="chart" id="bVerdict"></div></section>
+    <section class="rp-card"><div class="rp-hd"><b>六维度平均达标率</b></div><div class="chart" id="bDim"></div></section>
+  </div>
+
+  <section class="rp-card"><div class="rp-hd"><b>各岗位匹配度</b><em>人才库全部候选人按岗位汇总</em></div>
+    <table class="tbl rp-tbl">
+      <thead><tr><th>岗位JD</th><th>人数</th><th>平均分</th><th>通过率</th><th>待复核</th><th>拒绝(已入库)</th><th>平均匹配度</th></tr></thead>
+      <tbody id="bJd"></tbody>
+    </table>
+  </section>
+  <section class="rp-card"><div class="rp-hd"><b>不合格原因标签</b><em>拒绝候选自动归类，点标签到候选人列表里查看</em></div><div id="tagCloud" class="rp-tags"></div></section>
+  <details class="adv rp-adv">
+    <summary><b>候选人匹配明细</b><em>全部候选人，点表头排序，默认收起</em></summary>
+    <div class="rp-advbody">
+      <table class="tbl" id="bListTable">
+        <thead><tr>
+          <th data-bk="name" style="cursor:pointer;">姓名</th><th data-bk="gender" style="cursor:pointer;">性别</th><th data-bk="age" style="cursor:pointer;">年龄</th><th data-bk="phone" style="cursor:pointer;">联系方式</th><th data-bk="jdTitle" style="cursor:pointer;">岗位JD</th><th data-bk="score" style="cursor:pointer;">得分</th><th data-bk="verdict" style="cursor:pointer;">判定</th>
+        </tr></thead>
+        <tbody id="bList"></tbody>
+      </table>
+    </div>
+  </details>
+  </div>
+
+  <div class="dpanel" data-dp="today">
+  <details class="adv">
+    <summary><b>处理记录</b><em>自动筛选日志：拒绝、索要简历、自检等，默认收起</em></summary>
+  <div class="card" style="margin:12px;">
+    <div style="max-height:420px;overflow:auto;">
+      <table class="tbl">
+        <thead><tr>
+          <th>时间</th><th>动作</th><th>候选人</th><th>匹配JD</th><th>来源</th><th>详情/原因</th>
+        </tr></thead>
+        <tbody id="evBody"></tbody>
+      </table>
+    </div>
+  </div>
+  </details>
+  </div>
+</div>
+
+<div class="drawer" id="drawer">
+  <button class="close" id="drawerClose">关闭 ✕</button>
+  <div id="drawerBody"></div>
+</div>
+
+<script src="../lib/echarts.min.js"></script>
+<script src="../ui/echarts-theme.js"></script>
+<script src="../lib/pdf.min.js"></script>
+<script src="../lib/mammoth.browser.min.js"></script>
+<script src="../lib/tesseract/tesseract.min.js"></script>
+<script src="../lib/html2canvas.min.js"></script>
+<script src="../lib/jspdf.umd.min.js"></script>
+<script src="../lib/docx.umd.js"></script>
+<script src="../services/job-kb.js"></script>
+<script src="../services/matcher.js"></script>
+<script src="../services/engine.js"></script>
+<script src="../services/extractor.js"></script>
+<script src="../services/store.js"></script>
+<script src="../services/parsers.js"></script>
+<script src="../services/exporter.js"></script>
+<script src="../services/xlsx-lite.js"></script>
+<script src="../services/decision-log.js"></script>
+<script src="../services/people.js"></script>
+<script src="../ui/qtip.js"></script>
+<script src="../ui/empty.js"></script>
+<script src="dashboard.js"></script>
+<script src="report.js"></script>
+<script src="../ui/shell.js"></script>
+</body>
+</html>

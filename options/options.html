@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<script src="../ui/theme-init.js"></script>
+<title>Smart Filter 工作台</title>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font:14px/1.7 "Microsoft YaHei",system-ui,sans-serif;color:var(--text);background:var(--bg);}
+  .wrap{max-width:var(--page-max);margin:0 auto;padding:16px 16px 60px;}
+  header{display:flex;align-items:center;gap:12px;padding:10px 0 14px;}
+  header img{width:36px;height:36px;border-radius:var(--r-md);}
+  header h1{font-size:var(--fs-xl);margin:0;}
+  header .ver{font-size:var(--fs-sm);color:var(--text-2);background:var(--line);border-radius:var(--r-md);padding:1px 8px;}
+  header .sub{font-size:var(--fs-sm);color:var(--text-2);}
+  header .right{margin-left:auto;display:flex;gap:8px;}
+  .tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:16px;}
+  .tab{padding:8px 18px;border-radius:8px 8px 0 0;cursor:pointer;color:var(--text-2);font-weight:600;}
+  .tab.on{background:var(--surface);color:var(--info);box-shadow:0 -1px 0 var(--line) inset;}
+  .panel{display:none;}
+  .panel.on{display:block;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:12px;}
+  .card h2{font-size:var(--fs-lg);margin:0 0 2px;}
+  .card .desc{font-size:var(--fs-sm);color:var(--muted);margin-bottom:12px;}
+  .row{display:grid;grid-template-columns:170px 1fr;gap:12px;align-items:start;padding:10px 0;border-top:1px solid var(--bg);}
+  .row:first-of-type{border-top:none;}
+  .row .k{font-size:var(--fs-md);color:var(--text);font-weight:600;padding-top:5px;}
+  .row .n{font-size:var(--fs-sm);color:var(--muted);margin-top:4px;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+  .field label{display:block;font-size:var(--fs-sm);color:var(--text-2);margin-bottom:4px;font-weight:600;}
+  .field .n{font-size:var(--fs-xs);color:var(--muted);margin-top:2px;}
+  input[type=text],input[type=number],select,textarea{padding:7px 10px;border:1px solid var(--field);border-radius:var(--r-md);font-size:var(--fs-md);font-family:inherit;background:var(--surface);}
+  .field input,.field select,.field textarea{width:100%;}
+  textarea{min-height:72px;resize:vertical;width:100%;}
+  .chk{display:flex;align-items:center;gap:8px;font-size:var(--fs-md);cursor:pointer;}
+  .seg{display:inline-flex;border:1px solid var(--field);border-radius:var(--r-md);overflow:hidden;}
+  .seg button{border:none;background:var(--surface);padding:6px 18px;font-size:var(--fs-md);cursor:pointer;color:var(--text-2);border-right:1px solid var(--field);}
+  .seg button:last-child{border-right:none;}
+  .pace{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .pace input{width:80px;text-align:center;font-size:var(--fs-lg);}
+  .pace .chip{border:1px solid var(--info-200);background:var(--info-50);color:var(--info-700);border-radius:var(--r-sm);padding:3px 10px;font-size:var(--fs-sm);cursor:pointer;}
+  .pace .rate{font-size:var(--fs-sm);color:var(--text-2);}
+  .toolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;}
+  .jdlist{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+  .jditem{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);cursor:pointer;}
+  .jditem.editing{border-color:var(--info);box-shadow:0 0 0 2px var(--brand-100);}
+  .jditem .t{font-weight:600;flex:1;}
+  .jditem .m{font-size:var(--fs-xs);color:var(--text-2);max-width:380px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .tag{font-size:var(--fs-xs);padding:0 8px;border-radius:var(--r-md);background:var(--line);color:var(--text-2);}
+  .tag.g{background:var(--ok-50);color:var(--ok-700);}
+  details{margin-top:4px;}
+  details summary{cursor:pointer;font-size:var(--fs-md);color:var(--info);font-weight:600;padding:6px 0;}
+  .note{background:var(--warn-50);border:1px solid var(--warn-200);border-radius:var(--r-md);padding:8px 12px;font-size:var(--fs-sm);color:var(--warn-700);margin-bottom:12px;}
+  .reportbox{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:12px;font-size:var(--fs-md);white-space:pre-wrap;font-family:Consolas,"Microsoft YaHei",monospace;}
+  .ok{color:var(--ok);font-weight:600;} .bad{color:var(--bad-500);font-weight:600;} .warn{color:var(--warn);font-weight:600;}
+  .selgroup{border:1px solid var(--line);border-radius:var(--r-md);padding:12px;margin-bottom:12px;}
+  .selgroup h3{margin:0 0 8px;font-size:var(--fs-lg);}
+  .selgroup textarea{min-height:56px;font:12px/1.5 Consolas,monospace;}
+  .fixed{font-size:var(--fs-sm);color:var(--text-2);line-height:1.9;}
+  .ptable{width:100%;border-collapse:collapse;font-size:var(--fs-md);}
+  .ptable th{text-align:left;font-size:var(--fs-sm);color:var(--text-2);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;}
+  .ptable td{padding:7px 8px;border-bottom:1px solid var(--bg);vertical-align:middle;}
+  .ptable tr.editing td{background:var(--info-50);}
+  .ptable tr.click{cursor:pointer;}
+  .ptable tr.click:hover td{background:var(--surface-2);}
+  .ptable tr.editing:hover td{background:var(--info-50);}
+  .ptable .ttl{font-weight:600;}
+  .ptable .pj{font-size:var(--fs-xs);color:var(--muted);}
+  .ptable .pj.miss{color:var(--warn);}
+  .ptable input[type=number]{width:70px;padding:3px 6px;text-align:center;}
+  .bar{position:relative;width:120px;height:8px;background:var(--line);border-radius:var(--r-xs);overflow:hidden;display:inline-block;vertical-align:middle;margin-right:6px;}
+  .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--info);}
+  .bar i.full{background:var(--ok-500);}
+  .tag.add{background:var(--brand-100);color:var(--info-700);} .tag.upd{background:var(--warn-50);color:var(--warn-700);} .tag.err{background:var(--bad-50);color:var(--bad);}
+  .subtabs{display:flex;gap:6px;margin-bottom:12px;}
+  .stab{padding:6px 16px;border-radius:var(--r-lg);cursor:pointer;color:var(--text-2);background:var(--line);font-size:var(--fs-md);font-weight:600;}
+  .stab.on{background:var(--info);color:var(--on-color);}
+  .spanel{display:none;}.spanel.on{display:block;}
+  .split{display:grid;grid-template-columns:340px 1fr;gap:12px;align-items:start;}
+  .listcol{padding:12px;position:sticky;top:8px;max-height:calc(100vh - 24px);overflow:auto;}
+  .jrow{padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:6px;cursor:pointer;background:var(--surface);}
+  .jrow:hover{background:var(--surface-2);}
+  .jrow.on{border-color:var(--info);box-shadow:0 0 0 2px var(--brand-100);background:var(--info-50);}
+  .jrow .t{font-weight:600;font-size:var(--fs-md);}
+  .jrow .m{font-size:var(--fs-xs);color:var(--text-2);margin-top:2px;}
+  .jrow .tags{margin-top:4px;display:flex;gap:4px;flex-wrap:wrap;}
+  @media (max-width:960px){.split{grid-template-columns:1fr;}.listcol{position:static;max-height:none;}}
+  /* ===== v1.8.5 紧凑统一风格（参考 示例工作台） ===== */
+  body{font-size:var(--fs-md);line-height:1.6;}
+  .wrap{padding:10px 16px 40px;}
+  header{padding:4px 0 8px;} header h1{font-size:var(--fs-xl);} header img{width:30px;height:30px;}
+  .tabs{margin-bottom:10px;} .tab{padding:6px 14px;font-size:var(--fs-md);}
+  .card{padding:12px 16px;margin-bottom:10px;border-radius:var(--r-md);}
+  .card h2{font-size:var(--fs-lg);margin:0 0 4px;}
+  .card .desc{font-size:var(--fs-sm);margin-bottom:6px;}
+  .row{grid-template-columns:120px minmax(0,1fr);gap:10px;padding:6px 0;}
+  .row .k{font-size:var(--fs-md);padding-top:4px;}
+  .row .n{font-size:var(--fs-sm);margin-top:2px;line-height:1.5;}
+  input[type=text],input[type=number],input[type=time],select{padding:4px 8px;font-size:var(--fs-md);border-radius:var(--r-sm);height:30px;}
+  textarea{padding:6px 8px;font-size:var(--fs-md);border-radius:var(--r-sm);min-height:64px;}
+  .seg button{padding:4px 14px;}
+  .note{padding:6px 10px;margin-bottom:10px;line-height:1.6;}
+  .stab{padding:4px 14px;}
+  .split{grid-template-columns:360px minmax(0,1fr);gap:10px;}
+  .reportbox{padding:8px 10px;font-size:var(--fs-sm);}
+  .ptable td{padding:5px 8px;} .ptable th{padding:5px 8px;}
+  .pace input{width:70px;font-size:var(--fs-md);}
+  .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+  .step{border:1px solid var(--line);border-radius:var(--r-md);padding:10px 12px;background:var(--surface-2);display:flex;flex-direction:column;gap:6px;}
+  .step .st{font-weight:600;font-size:var(--fs-md);color:var(--text);}
+  .step .sc{display:flex;gap:6px;align-items:center;}
+  .step .sc select{flex:0 0 110px;}
+  .step .sc .btn{flex:1;}
+  .step .n{font-size:var(--fs-sm);color:var(--muted);line-height:1.5;}
+  .jrow{position:relative;padding:7px 10px;}
+  .jrow .jact{position:absolute;top:5px;right:6px;display:none;gap:4px;}
+  .jrow:hover .jact,.jrow.on .jact{display:flex;}
+  .jrow .jact a{font-size:var(--fs-xs);padding:0 6px;border-radius:var(--r-xs);background:var(--surface);border:1px solid var(--line);color:var(--text-2);cursor:pointer;line-height:18px;text-decoration:none;}
+  .jrow .jact a.del{color:var(--bad-500);border-color:var(--bad-200);}
+  .jrow .t{padding-right:72px;}
+  .ehead{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .ehead h2{margin:0;flex:1;font-size:var(--fs-lg);}
+  .sec{font-size:var(--fs-sm);font-weight:600;color:var(--text-2);margin:12px 0 6px;padding-top:8px;border-top:1px solid var(--bg);display:flex;align-items:center;gap:8px;}
+  /* v1.9.33 岗位编辑：左右两栏、标签右对齐、输入框一样长；右边和下面的文本框对齐（留出 ? 那一列） */
+  .g2{display:grid;grid-template-columns:110px minmax(0,1fr) 110px minmax(0,1fr);gap:8px 12px;align-items:center;margin:6px 0;padding-right:52px;}
+  .g2 > label.k{font-size:var(--fs-md);color:var(--text-2);font-weight:600;text-align:right;white-space:nowrap;}
+  .g2 > input,.g2 > select,.g2 > .inl,.g2 > .rng,.g2 > label.chk{width:100%;box-sizing:border-box;}
+  .g2 > select{height:32px;}
+  .g2 > .inl{display:flex;align-items:center;gap:6px;} .g2 > .inl input{flex:1;width:auto;min-width:0;}
+  .rng{display:flex;align-items:center;gap:6px;} .rng input{flex:1;width:auto;min-width:0;} .rng span{color:var(--text-2);}
+  .g2 .span3{grid-column:2 / 5;}
+  .sec .tg{margin-left:auto;font-weight:400;font-size:var(--fs-sm);color:var(--info);cursor:pointer;user-select:none;}
+  .sec .tg::after{content:' ▾';} .sec .tg.open::after{content:' ▴';}
+  .more{display:none;} .more.open{display:block;}
+  .jsum{margin:2px 0 8px;padding:8px 10px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);font-size:var(--fs-sm);color:var(--text-2);}
+  .jsum .tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;align-items:center;}
+  .pri{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;margin-left:auto;}
+  .pri span{padding:0 8px;font-size:var(--fs-xs);cursor:pointer;color:var(--text-2);line-height:20px;}
+  .pri span.on[data-p=high]{background:var(--bad-50);color:var(--bad);font-weight:600;}.pri span.on[data-p=mid]{background:var(--warn-50);color:var(--warn-700);font-weight:600;}.pri span.on[data-p=low]{background:var(--info-50);color:var(--brand-600);font-weight:600;}
+  .tag.p-high{background:var(--bad-50);color:var(--bad);}.tag.p-mid{background:var(--warn-50);color:var(--warn-700);}.tag.p-low{background:var(--info-50);color:var(--brand-600);}
+  @media (max-width:1200px){.g2{grid-template-columns:96px minmax(0,1fr);} .g2 .span3{grid-column:2;}}
+  .fgrid{display:grid;grid-template-columns:110px minmax(0,1fr) 40px;gap:8px 12px;align-items:center;}
+  .fgrid > label.k{font-size:var(--fs-md);color:var(--text-2);font-weight:600;text-align:right;}
+  .fgrid > .n{font-size:var(--fs-sm);color:var(--muted);line-height:1.4;}
+  .fgrid input[type=text],.fgrid select{width:100%;}
+  .fgrid textarea{width:100%;min-height:84px;}
+  .fgrid .lab-top{align-self:start;padding-top:6px;}
+  .inl{display:flex;align-items:center;gap:6px;} .inl input{width:80px;} .inl input[type=checkbox]{width:auto;}
+  @media (max-width:1200px){.fgrid{grid-template-columns:92px minmax(0,1fr);} .fgrid > .n{grid-column:2;margin-top:-4px;}}
+  .palette{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:var(--fs-sm);color:var(--text-2);margin-bottom:6px;}
+  .pchip{border:1px solid var(--info-200);background:var(--info-50);color:var(--info-700);border-radius:var(--r-sm);padding:1px 10px;cursor:pointer;}
+  .steplist{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;max-width:560px;}
+  .steplist li{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:var(--r-sm);padding:4px 8px;background:var(--surface);cursor:grab;}
+  .steplist li.drag{opacity:.4;} .steplist li .no{width:18px;color:var(--muted);font-size:var(--fs-sm);}
+  .steplist li .nm{flex:1;font-weight:600;font-size:var(--fs-md);} .steplist li .nm.na{color:var(--muted);font-weight:400;}
+  .steplist li select{height:26px;font-size:var(--fs-sm);width:96px;} .steplist li a{color:var(--bad-500);font-size:var(--fs-sm);cursor:pointer;}
+  .ptable td,.ptable th{font-size:var(--fs-md);} .ptable .ttl{font-size:var(--fs-md);}
+  .ptable a.lnk{color:var(--text);text-decoration:none;} .ptable a.lnk:hover{color:var(--info);text-decoration:underline;}
+  /* v1.9.1 岗位行：说明跟在岗位名后面，一行显示 */
+  .ptable td .ttl{font-weight:600;} .ptable td .pj{display:inline;margin-left:14px;font-size:var(--fs-sm);}
+  .ptable td{padding-top:4px;padding-bottom:4px;}
+  .src{display:inline-block;margin-left:8px;font-size:var(--fs-xs);font-weight:600;padding:0 6px;border-radius:var(--r-md);vertical-align:1px;line-height:16px;}
+  .src.boss{background:var(--accent-100);color:var(--accent-700);} .src.lp{background:var(--violet-50);color:var(--violet);} .src.both{background:var(--info-50);color:var(--brand-600);}
+  .src.none{background:var(--warn-50);color:var(--warn);}
+  .src::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;margin-right:5px;vertical-align:1px;}
+  /* v1.9.47 来源平台筛选条 */
+  .pfbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+  .pfbar span{font-size:var(--fs-sm);color:var(--text-2);padding:2px 10px;border:1px solid var(--line);border-radius:var(--r-lg);cursor:pointer;background:var(--surface);}
+  .pfbar span b{font-weight:600;margin-left:4px;color:var(--muted);}
+  .pfbar span:hover{border-color:var(--field);}
+  .pfbar span.on{border-color:var(--info);background:var(--info-50);color:var(--info-700);}
+  .pfbar span.on b{color:var(--info-700);}
+  .pfchk{display:flex;gap:16px;align-items:center;}
+  .toast{position:fixed;right:20px;bottom:20px;background:var(--overlay);color:var(--on-color);border-radius:var(--r-md);padding:8px 16px;font-size:var(--fs-md);display:none;box-shadow:0 6px 18px rgba(0,0,0,.2);z-index:10;}
+  .toast.err{background:var(--bad-500);}
+</style>
+<link rel="stylesheet" href="../ui/tokens.css">
+<link rel="stylesheet" href="../ui/components.css">
+<link rel="stylesheet" href="../ui/theme.css">
+</head>
+<body class="hrs-shell">
+<aside class="hrs-side">
+  <div class="hrs-brand"><img src="../icons/logo-mark.svg" alt="Smart Filter"><b class="sf-word">Smart <em>Filter</em></b></div>
+  <nav class="hrs-nav" id="hrsNav">
+    <div class="nav-g" data-g="jobs">
+      <div class="nav-l1 nav-gh" title="岗位管理"><svg viewBox="0 0 24 24"><path d="M3 7.5h18v11.5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M8.5 7.5V5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v2.5"/><path d="M3 12.5h18"/></svg><span>岗位管理</span><svg class="chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></div>
+      <div class="nav-l2">
+        <div class="tab" data-t="jd" data-s="list" title="岗位列表"><span>岗位列表</span></div>
+        <div class="tab" data-t="jd" data-s="ai" title="抓取导入"><span>抓取导入</span></div>
+      </div>
+    </div>
+    <div class="tab nav-l1" data-t="pub" title="发布职位"><svg viewBox="0 0 24 24"><path d="M12 15V4"/><path d="M7.5 8.5 12 4l4.5 4.5"/><path d="M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg><span>发布职位</span></div>
+    <div class="nav-g" data-g="run">
+      <div class="nav-l1 nav-gh" title="智选"><svg viewBox="0 0 24 24"><path d="M4 5h16l-6 7.5V19l-4-2v-4.5z"/></svg><span>智选</span><svg class="chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></div>
+      <div class="nav-l2">
+        <div class="tab" data-t="run" data-v="plan" title="岗位计划"><span>岗位计划</span></div>
+        <div class="tab" data-t="run" data-v="act" title="判定动作"><span>判定动作</span></div>
+      </div>
+    </div>
+    <div class="nav-g" data-g="greet">
+      <div class="nav-l1 nav-gh" title="打招呼"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg><span>打招呼</span><svg class="chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></div>
+      <div class="nav-l2">
+        <div class="tab" data-t="greet" data-v="plan" title="岗位计划"><span>岗位计划</span></div>
+        <div class="tab" data-t="greet" data-v="set" title="打招呼设置"><span>打招呼设置</span></div>
+      </div>
+    </div>
+    <div class="tab nav-l1" data-t="inbox" title="简历收集"><svg viewBox="0 0 24 24"><path d="M4 13.5 6.5 5h11l2.5 8.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.2 2.3h4.6l1.2-2.3H20"/><path d="M12 7.5v4.5M9.8 10 12 12.2 14.2 10"/></svg><span>简历收集</span><em class="nav-bd" id="navInboxBd" hidden></em></div>
+    <div class="tab nav-l1" data-t="sched" title="计划任务"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>计划任务</span></div>
+    <div class="nav-g" data-g="pool">
+      <div class="nav-l1 nav-gh" title="人才库"><svg viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.8 5.5-4.8s4.9 1.8 5.5 4.8"/><path d="M15.5 5.6a3.2 3.2 0 0 1 0 5.8M17.5 14.6c1.5.6 2.6 2.1 3 4.4"/></svg><span>人才库</span><svg class="chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></div>
+      <div class="nav-l2">
+        <div class="tab" data-t="talent" data-v="pool" title="候选人"><span>候选人</span></div>
+        <div class="tab" data-t="talent" data-v="parse" title="简历解析"><span>简历解析</span></div>
+      </div>
+    </div>
+    <div class="nav-g" data-g="stats">
+      <div class="nav-l1 nav-gh" title="数据统计"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span>数据统计</span><svg class="chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></div>
+      <div class="nav-l2">
+        <div class="tab" data-t="talent" data-v="today" title="今日工作"><span>今日工作</span></div>
+        <div class="tab" data-t="talent" data-v="analysis" title="数据分析"><span>数据分析</span></div>
+      </div>
+    </div>
+    <div class="tab nav-l1" data-t="scripts" title="话术"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8.5 8.5h7M8.5 12h7M8.5 15.5h4"/></svg><span>话术</span></div>
+    <div class="tab nav-l1" data-t="rec" title="简历分发"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg><span>简历分发</span></div>
+  </nav>
+  <div class="foot hrs-nav">
+    <div class="tab nav-l1" data-t="debug" title="设置"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3h0a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v0a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg><span>设置</span></div>
+    <span class="ver" id="ver"></span>
+  </div>
+</aside>
+<main class="hrs-main">
+  <div class="hrs-top">
+    <button class="hrs-back" id="hrsBack" type="button"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>返回</button><div class="hrs-crumb" id="hrsCrumb">Smart Filter</div>
+    <div class="right"><span class="saved" data-tip="改动自动保存，已打开的 Boss / 猎聘页面立即生效">已自动保存</span><span class="hdiv"></span><a class="plat" id="hrsGoBoss" href="https://www.zhipin.com/web/chat/index" target="_blank" rel="noopener" data-tip="在新标签页打开 Boss直聘 沟通页"><i class="pdot boss"></i>Boss直聘<svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></a><a class="plat" id="hrsGoLiepin" href="https://www.liepin.com/" target="_blank" rel="noopener" data-tip="在新标签页打开猎聘"><i class="pdot lp"></i>猎聘<svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></a><button class="rpa-pill" id="hrsRpaPill" type="button" data-tip="本机 RPA 助手状态，点击查看连接设置"><i></i><span>RPA 检测中</span></button><button class="btn ghost sm" id="btnGoBackup" style="display:none;">备份 / 恢复设置</button></div>
+  </div>
+<div class="wrap">
+  <div class="sf-notice" id="sfNotice" hidden></div>
+
+  <!-- ============ 在招岗位 ============ -->
+  <div class="panel on" id="p-jd">
+    <div class="subtabs" style="display:none;">
+      <div class="stab" data-s="ai">AI 抓取与导入</div>
+      <div class="stab on" data-s="list">岗位列表</div>
+      <div class="stab" data-s="chip">芯片公司识别</div>
+    </div>
+
+    <div class="spanel" id="s-ai">
+    <div class="card">
+      <h2>从平台抓职位，生成筛选条件</h2>
+      <div class="desc">三步互不依赖，可以只做其中一步。抓到的职位自动加入「岗位列表」</div>
+      <div class="steps">
+        <div class="step">
+          <div class="st">第 1 步：抓取职位</div>
+          <div class="sc"><select id="fetchSite"><option value="boss">Boss直聘</option><option value="liepin">猎聘</option></select><button class="btn" id="btnFetchGo">开始抓取</button></div>
+          <div class="n">打开平台页面，进入「职位管理」列表后自动逐个读 JD。<span id="fetchCount"></span></div>
+        </div>
+        <div class="step">
+          <div class="st">第 2 步：生成 AI 提示词表</div>
+          <div class="sc"><button class="btn" id="btnFetchSheet">导出 Excel</button></div>
+          <div class="n">含提示词和全部职位原文，整个发给 AI</div>
+        </div>
+        <div class="step">
+          <div class="st">第 3 步：导入职位筛选条件</div>
+          <div class="sc"><button class="btn" id="btnImport">导入 Excel</button><input type="file" id="importFile" accept=".xlsx" style="display:none;"></div>
+          <div class="n">AI 返回的表，导入前先预览，确认后写入</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="importCard" style="display:none;border-color:var(--info-200);">
+      <h2>导入预览</h2>
+      <div class="desc" id="importDesc"></div>
+      <div style="overflow-x:auto;"><table class="ptable" id="importTable"></table></div>
+      <div class="toolbar" style="margin:12px 0 0;">
+        <button class="btn" id="btnImportOk">确认导入</button>
+        <button class="btn ghost" id="btnImportCancel">取消</button>
+      </div>
+    </div>
+
+    </div>
+
+    <div class="spanel on" id="s-list">
+      <div class="split">
+        <div class="card listcol">
+          <div class="toolbar" style="margin:0 0 8px;">
+            <button class="btn" id="btnNewJd" style="display:none;">+ 新建岗位</button>
+            <button id="btnDupJd" style="display:none;"></button><button id="btnDelJd" style="display:none;"></button>
+          </div>
+          <input id="jobFilter" type="text" placeholder="搜索岗位" style="width:100%;margin-bottom:6px;">
+          <div class="pfbar" id="jobPlat">
+            <span data-pf="" class="on">全部<b id="pfAll"></b></span>
+            <span data-pf="boss">Boss 抓取<b id="pfBoss"></b></span>
+            <span data-pf="liepin">猎聘抓取<b id="pfLiepin"></b></span>
+            <span data-pf="none">未标平台<b id="pfNone"></b></span>
+          </div>
+          <label class="chk" style="font-size:var(--fs-sm);color:var(--text-2);margin-bottom:6px;display:flex;"><input type="checkbox" id="jobOrderSync"> 拖动排序同步到智选、打招呼</label>
+          <div id="jobTable" data-sk="rows:6"></div>
+        </div>
+        <div class="editcol">
+          <div class="card" id="jobEmpty" style="color:var(--muted);">在左边点一个岗位开始编辑。</div>
+          <div class="card" id="jobEditor">
+            <div class="ehead"><h2 id="jdEditTitle">编辑岗位</h2><span id="autoSaved" style="font-size:var(--fs-sm);color:var(--ok);">改动自动保存</span><button class="btn ghost sm" id="btnSaveJd">立即保存</button><button class="drawer-x" type="button" data-drawer-close="job" aria-label="关闭"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+            <div class="jsum" id="jdSummary"></div>
+            <div class="sec">岗位名称<a class="tg" data-fold="foldNames">平台上的职位名</a></div>
+            <div class="g2">
+              <label class="k">JD标题<span class="qtip">?<span class="qbox">话术里的 {position}</span></span></label><input id="jd_title" type="text" class="span3">
+            </div>
+            <div class="more" id="foldNames">
+            <div class="g2">
+              <label class="k">沟通职位名<span class="qtip">?<span class="qbox">Boss 和猎聘沟通列表卡片上显示的职位名，智选靠它把候选人归到这个岗位。两边名字一样时只填这一个</span></span></label><input id="jd_platform" type="text">
+              <label class="k">猎聘职位名<span class="qtip">?<span class="qbox">猎聘上的名字和沟通职位名不一样时才填，留空 = 一样</span></span></label><input id="jd_liepinjob" type="text" placeholder="和沟通职位名一样就留空">
+              <label class="k">Boss 推荐页名<span class="qtip">?<span class="qbox">只用于 Boss：推荐牛人右上角下拉里的名称，写到城市为止，如「人事主管 _ 上海」。打招呼靠它切换职位</span></span></label><input id="jd_greetjob" type="text" placeholder="如：人事主管 _ 上海">
+              <label class="k">来源平台<span class="qtip">?<span class="qbox">抓取时自动标记。导入或手动新建的岗位在这里勾。勾了哪个平台，智选和打招呼才会在那个平台处理这个岗位</span></span></label><div class="pfchk"><label class="chk"><input type="checkbox" id="jd_pf_boss"> Boss 直聘</label><label class="chk"><input type="checkbox" id="jd_pf_liepin"> 猎聘</label></div>
+            </div>
+            </div>
+            <div class="sec">基础条件<a class="tg" data-fold="foldBase">城市、年龄、学历</a></div>
+            <div class="g2">
+              <label class="k">复用条件<span class="qtip">?<span class="qbox">选了别的职位，就用它的基础条件</span></span></label><select id="jd_basefrom"><option value="">不复用，单独设置</option></select>
+              <span></span><span></span>
+              <label class="k">最低经验</label><div class="inl"><input id="b_exp" type="number" min="0" max="40" placeholder="不限"><span>年</span></div>
+              <label class="k">芯片行业<span class="qtip">?<span class="qbox">看过往公司名，规则在「芯片公司识别」</span></span></label><label class="chk"><input type="checkbox" id="b_chip"> 必须有芯片公司经历</label>
+            </div>
+            <div class="more" id="foldBase">
+            <div class="g2" id="baseFields">
+              <label class="k">期望城市<span class="qtip">?<span class="qbox">多个用 | 隔开，留空不限</span></span></label><input id="b_city" type="text" placeholder="北京|上海">
+              <label class="k">最低学历</label><div class="inl" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;"><select id="b_edu" style="width:auto;min-width:90px;"><option value="0">不限</option><option value="2">大专</option><option value="3">本科</option><option value="4">硕士</option><option value="5">博士</option></select><label class="chk" style="display:inline-flex;white-space:nowrap;" title="教育经历里有大专或专升本的不要"><input type="checkbox" id="b_nodz"> 第一学历是大专的不要</label></div>
+              <label class="k">年龄</label><div class="rng"><input id="b_ageMin" type="number" min="16" max="70" placeholder="不限"><span>–</span><input id="b_ageMax" type="number" min="16" max="70" placeholder="40"><span>岁</span></div>
+            </div>
+            </div>
+            <div class="sec">筛选条件</div>
+            <div class="fgrid">
+              <label class="k lab-top">Job relevance</label><textarea id="jd_hard" placeholder="IC验证/数字IC"></textarea><span class="n lab-top">职位相关性。写招聘方向，几个方向用 / 隔开，例如「IC验证/数字IC」。打招呼时先看期望岗位，再看工作经历：从毕业后第一份工作到现在，只要有一段做的就是正在招的岗位就直接通过（职位名一致、相似，或同一个具体方向）；没做过时，看全部工作经历按时长加权的匹配度：期望岗位一致 ≥ 60%，不一致要 ≥ 75%。在校期间的实习不算。岗位方向和相近关系来自内置的岗位知识库，所有岗位通用。不要求字面一样（写 IC验证，职位是 DV、UVM 验证都算，FPGA、器件、封装、版图不算）。可以写多行，和其中任何一个方向相关就算过。卡片上做过的职位就是正在招的这个岗位，直接算相关。也可以写「期望职位：验证」</span>
+              <label class="k lab-top">加分项</label><textarea id="jd_opt" placeholder="绩效&#10;薪酬"></textarea><span class="n lab-top">每行一条，不影响合格，命中越多越靠前</span>
+              <label class="k">打招呼</label><label class="chk"><input type="checkbox" id="g_same"> 用同一套 Job relevance 和加分项</label><span class="n"></span>
+              <label class="k">简历详情</label><div class="inl"><label class="chk"><input type="checkbox" id="dt_screen"> 智选</label><label class="chk" style="margin-left:12px;"><input type="checkbox" id="dt_greet"> 打招呼</label>　通过分 <input id="dt_pass" type="number" min="0" max="100" placeholder="60" style="width:70px;"></div><span class="n">勾上后，卡片和会话顶部只判基础条件，Job relevance 和加分项改为点开完整简历打分：Job relevance 词共 60 分、加分词共 40 分，各按词数平分（同方向的说法都算）。出现否决词，或 Job relevance 词一个都没中，直接不合格</span>
+              <label class="k lab-top">否决词</label><textarea id="dt_veto" placeholder="销售&#10;外包驻场" style="min-height:52px;"></textarea><span class="n lab-top">简历里出现任意一个就不合格，不管分数。只在勾了「简历详情」时用</span>
+            </div>
+            <div class="fgrid" id="greetOwn" style="margin-top:6px;">
+              <label class="k lab-top">打招呼 Job relevance</label><textarea id="g_hard" placeholder="IC验证/数字IC"></textarea><span class="n lab-top">基础条件共用，这里只写 Job relevance</span>
+              <label class="k lab-top">打招呼加分</label><textarea id="g_bonus"></textarea><span class="n"></span>
+            </div>
+            <details style="margin-top:8px;"><summary>JD 原文（抓取得到，可修改）</summary><textarea id="jd_text" style="min-height:160px;margin-top:6px;width:100%;"></textarea></details>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="spanel" id="s-chip">
+    </div>
+  </div>
+
+  <!-- ============ 智选 ============ -->
+  <div class="panel" id="p-run">
+    <div data-v="plan">
+    <div class="card" style="padding:8px 10px;">
+      <table class="ptable" id="planTable"></table>
+    </div>
+
+    </div>
+    <div data-v="act">
+    <div class="tier">常用</div>
+    <div class="card">
+      <h2>判定后的动作</h2>
+      <div class="desc">只在「正式运行」时执行</div>
+      <div class="row">
+        <div class="k">合格候选人</div>
+        <div><label class="chk"><input type="checkbox" id="autoRequest"> 自动索要简历（优先点平台按钮，没有按钮则发「索要简历」话术）。岗位设了打招呼语时，合格后先发打招呼语问一句，候选人回复后再索要简历</label>
+          <div class="n">不论是否勾选，都会写入人才库。</div></div>
+      </div>
+      <div class="row">
+        <div class="k">不合格候选人</div>
+        <div>
+          <select id="rejectMode" style="width:320px;">
+            <option value="chat">已读 + 发送拒绝话术</option>
+            <option value="read">仅已读，不回复</option>
+            <option value="skip">不动作，只记日志</option>
+          </select>
+          <label class="chk" style="margin-top:6px;"><input type="checkbox" id="rejectTapInappropriate"> 同时点平台的「不合适」按钮</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="k">公司名称</div>
+        <div><input id="company" type="text" style="width:320px;" placeholder="话术里的 {company}">
+          <div class="n">岗位名 {position} 直接取候选人所属岗位的 JD 标题，不用单独填。</div></div>
+      </div>
+    </div>
+
+    <details class="adv">
+      <summary><b>高级设置</b><em>筛选节拍与顺序、AI 判断、人才库导出</em></summary>
+      <div class="adv-body">
+    <div class="card">
+      <h2>智选运行</h2>
+      <div class="desc">在 Boss / 猎聘「沟通」里自动筛选回复。运行模式、筛选节拍在页面右下角的浮层上切换</div>
+      <div class="row" style="display:none;">
+        <div class="k">运行模式</div>
+        <div>
+          <div class="seg" id="modeSeg">
+            <button data-m="stop">停止</button>
+            <button data-m="dry">试运行</button>
+            <button data-m="live">正式运行</button>
+          </div>
+          <div class="n" id="modeNote"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="k">节拍浮动</div>
+        <div>
+          <div class="pace" style="display:none;">
+            <input id="paceSec" type="number" min="3" max="600"> <span>秒/个</span>
+            <span class="chip" data-p="10">10秒</span><span class="chip" data-p="20">20秒</span><span class="chip" data-p="30">30秒</span><span class="chip" data-p="60">60秒</span>
+            <span class="rate" id="paceRate"></span>
+          </div>
+          <label class="chk"><input type="checkbox" id="paceJitter"> 节拍随机浮动（固定频率更容易被平台识别为脚本）</label>
+          <div class="n">浮动幅度、动作间停顿、每几人小憩，在「设置 · 操作节奏」里调</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="k">处理顺序</div>
+        <div><label class="chk"><input type="checkbox" id="smartUnreadFirst"> 每次开始或继续，先处理「新招呼」里的「未读」</label>
+          <div class="n">只处理「新招呼 + 未读」，不进「全部」。列表跑偏了会自动切回来。判定过的人记 3 天，暂停后继续、刷新页面都不会重复判定（试运行判过的，切到正式运行时会重新判并执行动作）。</div></div>
+      </div>
+      <div class="row" style="display:none;">
+        <div class="k">每日动作上限</div>
+        <div><input id="dailyCap" type="number" min="1" max="1000" style="width:100px;"> 次
+          <div class="n">发话术、索要简历各算一次，到上限当天停止</div></div>
+      </div>
+    </div>
+
+    <div class="card" style="display:none;">
+      <h2>今日智选计划</h2>
+      <div class="desc">勾选的岗位同时跑。每个岗位到上限就停，其他岗位继续，每天 0 点进度清零。只有「正式运行」计数，试运行不计入</div>
+      <div class="row">
+        <div class="k">执行时段</div>
+        <div>
+          <label class="chk"><input type="checkbox" id="planWindowOn"> 只在这个时段内筛选</label>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
+            <input type="time" id="planStart" style="width:120px;"> 到 <input type="time" id="planEnd" style="width:120px;">
+            <span class="n" id="windowNow" style="font-size:var(--fs-sm);color:var(--muted);"></span>
+          </div>
+          <div class="n">不勾选表示全天</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="k">今日合计</div>
+        <div><span id="planTotal" style="font-weight:600;"></span>
+          <button class="btn ghost sm" id="btnResetProgress" style="margin-left:10px;">今日进度清零</button></div>
+      </div>
+    </div>
+
+    <div class="card" id="aiCard">
+      <h2>AI 判断（可选）</h2>
+      <div class="desc">开了「简历详情」的岗位，读到完整简历后发给 AI，按 AI 的结论判合格与否（否决词仍然先生效）。AI 出错时自动改用关键词打分。接口用 OpenAI 兼容格式（DeepSeek、通义千问、Kimi、OpenAI 等都支持），AI 只需回一段 JSON：{"pass":true,"score":80,"reason":"一句话"}</div>
+      <div class="grid" style="margin-top:8px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">
+        <div class="field"><label>启用</label><label class="chk"><input type="checkbox" id="ai_on"> 读到简历详情后让 AI 判断</label></div>
+        <div class="field"><label>接口地址</label><input id="ai_url" type="text" placeholder="https://api.deepseek.com/chat/completions"><div class="n">填完整的 chat/completions 地址</div></div>
+        <div class="field"><label>模型名</label><input id="ai_model" type="text" placeholder="deepseek-chat"></div>
+        <div class="field"><label>API Key</label><input id="ai_key" type="password" placeholder="sk-..."><div class="n">只存在这台电脑的浏览器里，导出设置时不包含</div></div>
+      </div>
+      <div class="toolbar" style="margin:10px 0 0;"><button class="btn" id="btnAiSave">保存</button><button class="btn ghost" id="btnAiTest">测试一次</button><span id="aiState" style="font-size:var(--fs-sm);color:var(--muted);"></span></div>
+    </div>
+    <div class="card">
+      <h2>人才库导出</h2>
+      <div class="desc">候选人发来的 PDF 简历现在在左侧「简历收集」里汇总、命名和保存</div>
+      <div class="row">
+        <div class="k">人才库导出格式</div>
+        <div><select id="exportFormat" style="width:220px;">
+            <option value="pdf+docx">PDF + Word</option>
+            <option value="pdf">仅 PDF</option>
+            <option value="docx">仅 Word (.docx)</option>
+          </select>
+          <div class="n">「人才库与分析」页面里「按设置导出」用这个格式。</div></div>
+      </div>
+    </div>
+
+      </div>
+    </details>
+    </div>
+  </div>
+
+  <!-- ============ 打招呼 ============ -->
+  <div class="panel" id="p-greet">
+    <div data-v="plan">
+    <div class="card" style="padding:8px 10px;">
+      <table class="ptable" id="greetTable"></table>
+    </div>
+
+    <div class="n" style="font-size:var(--fs-sm);color:var(--muted);">打招呼的条件（城市、年龄、学历、经验、芯片行业、Job relevance、加分项）在「岗位管理」里设置。</div>
+    </div>
+    <div data-v="set">
+    <div class="note">独立功能：在 Boss「推荐牛人」、猎聘「人才推荐」页按岗位计划自动打招呼，和沟通筛选互不影响。出现验证码、操作频繁、次数上限等提示会立即停止。插件只能模拟鼠标操作，平台仍可能识别为自动化，请保持低频，账号风险自行评估。</div>
+    <div class="tier">常用</div>
+    <div class="card">
+      <h2>打招呼设置</h2>
+      <div class="desc">运行模式、打招呼节拍在推荐牛人页右下角的浮层上切换</div>
+      <div class="row" style="display:none;">
+        <div class="k">运行模式</div>
+        <div>
+          <div class="seg" id="greetSeg"><button data-m="stop">停止</button><button data-m="dry">试运行</button><button data-m="live">正式运行</button></div>
+          
+        </div>
+      </div>
+      <div class="row" style="display:none;">
+        <div class="k">打招呼节拍</div>
+        <div><input id="greetPaceSec" type="number" min="10" max="600" style="width:90px;"> 秒/个，实际按「设置 · 操作节奏」上下浮动
+          <div class="n">只对真正点了打招呼的计时，建议 40 秒以上</div></div>
+      </div>
+      <div class="row">
+        <div class="k">打招呼语</div>
+        <div><input id="greetMsgDefault" type="text" style="width:100%;max-width:640px;" placeholder="例：您好，我是示例科技 HR，看到您的经历和我们的职位很匹配，方便聊聊吗？">
+          <div class="n">Boss 和猎聘通用，打招呼和智选都用。智选判定合格后先发这句问一下，候选人回复了再索要简历。猎聘点「立即沟通」后在打开的聊天窗口里发这句话，Boss 打完招呼后点「继续沟通」再发这句话，然后关掉窗口。每个岗位可以在下面表格里单独设，留空用这里的默认语，都留空就只发平台默认招呼</div></div>
+      </div>
+      <div class="row">
+        <div class="k">每日总上限</div>
+        <div><input id="greetDailyCap" type="number" min="1" max="500" style="width:90px;"> 个
+          <div class="n">所有岗位加起来，今天最多打几个招呼。默认 180。<span id="greetToday"></span></div>
+          <div class="n cap-warn" id="greetCapWarn" hidden>超过 180 个，平台更容易弹验证或限制账号。确实需要可以保留，建议同时把节拍调到 45 秒以上</div></div>
+      </div>
+    </div>
+
+    <details class="adv">
+      <summary><b>高级设置</b><em>真实鼠标点击、平台初筛</em></summary>
+      <div class="adv-body">
+    <div class="card">
+      <div class="row">
+        <div class="k">真实鼠标点击</div>
+        <div><label class="chk"><input type="checkbox" id="greetTrustedClick"> 脚本点击没反应时，改用真实鼠标点击（只对猎聘生效；Boss 用 RPA，见侧边栏底部「设置」里的「Boss 执行方式」）</label>
+          <div class="n" style="display:none;">Boss 的打招呼按钮可能只认真人点击。开启后插件通过浏览器调试接口发出系统级鼠标点击，浏览器顶部会出现「Smart Filter 已开始调试此浏览器」提示条（Chrome 强制显示，2 分钟不用自动消失）。不要点提示条上的「取消」，否则这次点击会失败。开着 F12 时无法使用。</div></div>
+      </div>
+      <div class="row">
+        <div class="k">平台初筛</div>
+        <div><label class="chk"><input type="checkbox" id="greetPlatformFilter"> 切换岗位时，按岗位的基础条件设置 Boss 自带的「筛选」（经验要求、学历要求）</label>
+          <div class="n" style="display:none;">让 Boss 先把不符合的人挡掉，插件再按全部条件细看。需要 Boss VIP 才有筛选面板，没有时自动跳过。会先点「清除」，你手动设的其他筛选项会被清掉。年龄、城市、行业仍由插件自己判断。</div></div>
+      </div>
+    </div>
+      </div>
+    </details>
+    </div>
+  </div>
+
+  <!-- ============ 发布职位 ============ -->
+  <div class="panel" id="p-pub">
+    <div class="note">把「岗位管理」里的职位发到 Boss / 猎聘：在这里准备好内容，到平台点「发布职位」，表单页右下角会出现「Smart Filter · 发布职位」，点「填入表单」自动填。插件只填不发，核对后由你自己点「发布」。</div>
+    <div class="card">
+      <h2>准备发布内容</h2>
+      <div class="fgrid">
+        <label class="k">岗位</label><select id="pb_jd"></select><span class="n">从在招岗位里选</span>
+        <label class="k">职位名称</label><input id="pb_title" type="text"><span class="n">默认平台职位名，可改</span>
+        <label class="k">薪资</label><select id="pb_salary" style="width:200px;"><option value="15-40-15">15-40k · 15薪</option><option value="30-60-15">30-60k · 15薪</option><option value="40-60-15">40-60k · 15薪</option><option value="50-70-15">50-70k · 15薪</option></select><span class="n"></span>
+        <label class="k">工作城市</label><div class="inl"><label class="chk"><input type="checkbox" id="pb_sh" checked> 上海</label><label class="chk" style="margin-left:12px;"><input type="checkbox" id="pb_sz"> 苏州</label></div><span class="n">Boss 每个城市要单独发一次，填表时选城市</span>
+        <label class="k">经验 / 学历</label><div class="inl"><select id="pb_exp" style="width:120px;"><option value="">不限</option><option>1-3年</option><option>3-5年</option><option>5-10年</option><option>10年以上</option></select><select id="pb_edu" style="width:110px;"><option value="">不限</option><option>大专</option><option>本科</option><option>硕士</option><option>博士</option></select></div><span class="n">按岗位基础条件预选</span>
+        <label class="k">平台</label><div class="inl"><label class="chk"><input type="checkbox" id="pb_boss" checked> Boss直聘</label><label class="chk" style="margin-left:12px;"><input type="checkbox" id="pb_lp" checked> 猎聘</label></div><span class="n"></span>
+        <label class="k lab-top">职位描述</label><textarea id="pb_desc" style="min-height:220px;"></textarea><span class="n lab-top">默认用抓取到的 JD 原文，可以在这里改</span>
+      </div>
+      <div class="toolbar" style="margin:12px 0 0;"><button class="btn" id="pb_go">准备好了，去平台发布</button><span class="n" id="pb_state" style="font-size:var(--fs-sm);color:var(--muted);"></span></div>
+    </div>
+  </div>
+
+  <!-- ============ 计划任务 ============ -->
+  <div class="panel" id="p-sched">
+    <div class="note">把 Boss、猎聘的「打招呼」「智选」按你排的顺序串起来自动跑：每天到点做第一步，做完自动切到下一步，插件会把对应平台的标签页切到对应页面并设好运行模式。需要电脑和浏览器开着、平台已登录。</div>
+    <div class="tier">常用</div>
+    <div class="card">
+      <h2>计划</h2>
+      <div class="row">
+        <div class="k">启用计划任务</div>
+        <div><label class="chk"><input type="checkbox" id="sc_enabled"> 每天按下面的顺序自动执行</label>
+          <div class="n">关闭后不影响你手动在弹窗或各标签页里开关智选、打招呼。</div></div>
+      </div>
+      <div class="row">
+        <div class="k">每天开始时间</div>
+        <div><input type="time" id="sc_start" style="width:130px;">
+          <div class="n">默认 00:00。各岗位的计数每天 0 点归零，到点从 0 开始重新做到上限。这个时间浏览器没开的话，打开后自动补跑。</div></div>
+      </div>
+      <div class="row">
+        <div class="k">任务顺序</div>
+        <div>
+          <div class="palette">添加：<span class="pchip" data-task="boss-greet">Boss 打招呼</span><span class="pchip" data-task="boss-screen">Boss 智选</span><span class="pchip" data-task="liepin-screen">猎聘智选</span><span class="pchip" data-task="liepin-greet">猎聘打招呼</span></div>
+          <ol id="sc_steps" class="steplist"></ol>
+          <div class="n">点上面的任务加到末尾，拖动调整顺序，可以重复、随意组合。每一步完成（到上限或推荐看完）后自动进入下一步。智选有不限量的岗位时那一步不会结束，适合放最后。</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>今天的进度</h2>
+      <div class="reportbox" id="sc_status">读取中</div>
+      <div class="toolbar" style="margin:10px 0 0;">
+        <button class="btn" id="sc_run">立即开始今天的计划</button>
+        <button class="btn danger" id="sc_stopBtn">停止今天的计划</button>
+      </div>
+      <div class="n" style="font-size:var(--fs-sm);color:var(--muted);margin-top:6px;">「停止」会同时停掉智选和打招呼，今天不再自动执行，明天到点照常开始。</div>
+    </div>
+    <details class="adv">
+      <summary><b>高级设置</b><em>到点自动打开平台页面</em></summary>
+      <div class="adv-body">
+    <div class="card">
+      <div class="row">
+        <div class="k">平台页面</div>
+        <div><label class="chk"><input type="checkbox" id="sc_autoOpen"> 到点时没有打开对应平台（Boss / 猎聘），自动在后台打开一个标签页</label></div>
+      </div>
+    </div>
+      </div>
+    </details>
+  </div>
+
+
+  <!-- ============ v2.5.0 简历收集 ============ -->
+  <div class="panel" id="p-inbox">
+    <div class="ib-bar">
+      <div class="rl-seg" id="ibRange" role="group" aria-label="时间范围"><button type="button" data-v="today" class="on">今天</button><button type="button" data-v="7d">近 7 天</button><button type="button" data-v="all">全部</button></div>
+      <select id="ibSite" aria-label="平台"><option value="">全部平台</option><option value="boss">BOSS</option><option value="liepin">猎聘</option></select>
+      <select id="ibOrigin" aria-label="来源"><option value="">全部来源</option><option value="self">自发</option><option value="request">请求</option><option value="none">未确认</option></select>
+      <div class="rl-q"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input id="ibQ" type="text" placeholder="搜姓名、公司"></div>
+      <span class="rl-sp"></span>
+      <span class="ib-on" id="ibOn" data-tip="候选人发来 PDF 后自动收进来"><i></i><span>收集中</span></span>
+      <button class="btn ghost sm" id="ibSet" type="button">命名与收集设置</button>
+      <button class="btn ghost sm" id="ibSheet" type="button" data-tip="当前筛选下的简历清单（Excel，每个岗位一个工作表）">导出汇总表</button>
+      <button class="btn sm" id="ibSaveAll" type="button" data-tip="把当前筛选下名字完整、还没保存的简历保存到本地">全部保存到本地</button>
+    </div>
+    <div class="ib-ov" id="ibOv" data-sk="block"></div>
+    <div class="rl-alert" id="ibPerm" hidden></div>
+    <div class="rl-alert" id="ibBad" hidden></div>
+    <div class="rl-alert a-soft" id="ibRecon" hidden></div>
+    <div class="ib-legend" id="ibLegend">
+      <span class="lg"><i class="pill-k p-agree"></i>两处一致（在线简历 + PDF）</span>
+      <span class="lg"><i class="pill-k p-auto"></i>自动识别（一处）</span>
+      <span class="lg"><i class="pill-k p-conflict"></i>两处不一致，已按规则取值</span>
+      <span class="lg"><i class="pill-k p-man"></i>你填的</span>
+      <span class="lg"><i class="pill-k p-miss"></i>没识别到，点一下补上</span>
+      <span class="lg"><i class="og og-self">自发</i>候选人主动发的</span>
+      <span class="lg"><i class="og og-request">请求</i>我们索要后发的</span>
+    </div>
+    <section id="ibList" aria-live="polite" data-sk="cards:3"></section>
+    <div class="ib-pop" id="ibPop" hidden role="dialog"></div>
+
+    <div class="ib-home" hidden>
+    <div class="card" id="cardInboxSet">
+      <div class="ib-tabs" role="tablist">
+        <button type="button" class="ib-tab on" data-tab="name">命名</button>
+        <button type="button" class="ib-tab" data-tab="opt">类别和城市</button>
+        <button type="button" class="ib-tab" data-tab="save">收集与保存</button>
+        <button type="button" class="ib-tab" data-tab="diag">排查</button>
+      </div>
+
+      <div class="ib-pane on" data-pane="name">
+        <div class="ib-blk">
+          <label class="sw"><input type="checkbox" id="ri_renameOn"><i></i><span>自定义重命名</span></label>
+          <div class="ib-tip">关掉就保留候选人发来的原文件名（前面补上姓名）</div>
+        </div>
+        <div class="ib-blk ib-tplrow">
+          <div class="ib-bt">文件名由这些块按顺序拼成<span class="ib-tip" style="margin:0 0 0 8px;">拖动换顺序，× 去掉</span></div>
+          <div class="ib-builder" id="ri_builder"></div>
+          <div class="ib-bt2">可以加的块</div>
+          <div class="ib-tray" id="ri_tray"></div>
+          <div class="ib-bt2">块之间用</div>
+          <div class="rl-seg" id="ri_sep" role="group" aria-label="分隔符"><button type="button" data-v="—">—</button><button type="button" data-v="-">-</button><button type="button" data-v="_">_</button><button type="button" data-v=" ">空格</button><button type="button" data-v="·">·</button></div>
+          <div class="ib-eg" id="ri_eg"></div>
+          <details class="ib-raw"><summary>直接编辑格式文字</summary>
+            <input id="ri_tpl" type="text" class="ib-tpl" spellcheck="false">
+            <div class="ib-tip">字段写成 {姓名} 这种形式。块和分隔符以外的文字（例如【】）只能在这里加</div>
+            <div class="toolbar" style="margin:6px 0 0;"><button class="btn ghost sm" id="ri_tplReset" type="button">恢复默认格式</button></div>
+          </details>
+        </div>
+        <div class="ib-blk">
+          <label class="chk"><input type="checkbox" id="ri_shortCompany"> 公司名用简称（去掉「有限公司」、括号里的地区和开头的城市）</label>
+        </div>
+        <div class="ib-blk ib-rule">
+          <div class="ib-bt">取值顺序</div>
+          <ol class="ib-steps"><li><b>自动识别</b>在线简历和 PDF 都读，两处都有时互相核对</li><li><b>你来补</b>自动识别不到的项，在简历卡片上点黄色虚线块补上</li><li><b>更正</b>识别错了，点那一块选「更正」，这一项以你填的为准</li></ol>
+        </div>
+      </div>
+
+      <div class="ib-pane" data-pane="opt">
+        <div class="ib-blk">
+          <div class="ib-bt">类别选项</div>
+          <div class="ib-chips" id="ri_cats"></div>
+          <div class="ib-add"><input id="ri_catNew" type="text" placeholder="新类别，例如 AE" maxlength="12"><button class="btn ghost sm" id="ri_catAdd" type="button">添加</button></div>
+        </div>
+        <div class="ib-blk">
+          <div class="ib-bt">岗位对应类别<span class="ib-tip" style="margin:0 0 0 8px;">「自动」按岗位名判断：验证 → DV，设计 → DE，FPGA → FPGA，IT / 运维 → IT</span></div>
+          <div class="ib-catmap" id="ri_catMap"></div>
+        </div>
+        <div class="ib-blk">
+          <div class="ib-bt">城市选项</div>
+          <div class="ib-chips" id="ri_cities"></div>
+          <div class="ib-add"><input id="ri_cityNew" type="text" placeholder="新城市，例如 无锡" maxlength="8"><button class="btn ghost sm" id="ri_cityAdd" type="button">添加</button></div>
+          <div class="ib-tip">按在线简历里的期望城市自动选；期望城市不在选项里时留空，等你补</div>
+        </div>
+      </div>
+
+      <div class="ib-pane" data-pane="save">
+        <div class="ib-blk">
+          <label class="chk"><input type="checkbox" id="resumeAutoSave"> 候选人发来 PDF 后自动收进「简历收集」</label>
+          <div class="ib-tip">智选没在跑时也会收：你自己点开某个会话、里面有 PDF 也算。只读页面，不会点任何按钮</div>
+        </div>
+        <div class="ib-blk">
+          <div class="ib-bt">收哪些简历</div>
+          <div class="ib-rules"><div><b>BOSS</b>会话里有附件简历就收，自发和请求都收，分别标出来</div>
+          <div><b>猎聘</b><label class="chk" style="display:inline-flex;"><input type="checkbox" id="ri_liepinOnlySelf"> 只收候选人主动发的（自发）</label></div></div>
+          <div class="ib-tip">自发 = 候选人主动发来的；请求 = 我们先索要（发过「索要简历」话术、点过「求简历」，或插件替你索要过）对方才发的。在卡片「⋯」里可以改</div>
+        </div>
+        <div class="ib-blk">
+          <label class="chk"><input type="checkbox" id="ri_autoExport"> 名字完整的收到就保存到本地，缺项的补全后再保存</label>
+        </div>
+        <div class="ib-blk">
+          <div class="ib-bt">保存位置</div>
+          <div class="ib-where" id="ri_where" role="radiogroup" aria-label="保存位置">
+            <label class="ib-wo" data-to="folder">
+              <input type="radio" name="ri_saveTo" value="folder">
+              <span class="ib-wt"><b>我选的文件夹</b><span>电脑上任意位置，例如 D:\招聘\简历</span></span>
+              <span class="ib-wd" id="ri_dirBox">
+                <span class="ib-dir" id="ri_dirName">还没选</span>
+                <span class="ib-dirst" id="ri_dirSt"></span>
+                <button class="btn sm" id="ri_pickDir" type="button">选择文件夹…</button>
+              </span>
+            </label>
+            <label class="ib-wo" data-to="downloads">
+              <input type="radio" name="ri_saveTo" value="downloads">
+              <span class="ib-wt"><b>浏览器下载目录</b><span>不用授权，适合不常换位置</span></span>
+              <span class="ib-wd"><span class="ib-path">下载目录 / <input id="exportFolder" type="text" style="width:120px;" placeholder="HR人才库"> / 简历收集 /</span></span>
+            </label>
+          </div>
+          <div class="ib-bt2">文件夹里怎么分</div>
+          <div class="rl-seg" id="ri_layout" role="group" aria-label="子文件夹"><button type="button" data-v="day-job">日期 / 岗位 /</button><button type="button" data-v="job">岗位 /</button><button type="button" data-v="flat">不分，全放一起</button></div>
+          <div class="ib-tip" id="pathPreview"></div>
+          <div class="ib-tip">只保存真正的 PDF 文件。平台只给了预览网页、没拿到 PDF 原件的简历不会保存，卡片上会标「没拿到 PDF」</div>
+        </div>
+        <div class="ib-blk">
+          <label class="chk"><input type="checkbox" id="ri_fetchTab"> 预览链接里取不到 PDF 时，在后台临时标签页打开一次预览页取文件（几秒后自动关闭）</label>
+          <div class="ib-tip">另外两种情况也会自动接住 PDF：你在沟通页打开某份简历的预览，或在平台上点了「下载」</div>
+        </div>
+        <div class="ib-blk">
+          <label class="chk"><input type="checkbox" id="ri_replaceOld"> 改了名字重新保存时，删掉上次保存的旧文件</label>
+        </div>
+      </div>
+
+      <div class="ib-pane" data-pane="diag">
+        <div class="ib-blk">
+          <div class="ib-bt">侦察记录</div>
+          <span id="ri_recon" class="ib-tip" style="margin:0;">没有</span>
+          <div class="toolbar" style="margin:8px 0 0;"><button class="btn ghost sm" id="ri_reconExport" type="button">导出侦察记录</button><button class="btn ghost sm" id="ri_reconClear" type="button">清空</button></div>
+          <div class="ib-tip">会话里看得到简历消息、却没拿到 PDF 文件时，自动记下这部分页面结构（不含输入框内容）。导出发给开发即可一次修好</div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- ============ 简历分发 ============ -->
+  <div class="panel" id="p-rec">
+    <div class="note">每天定时把邮箱里的未读简历发到 团队消息群。这个功能由「示例工作台」执行：它负责收邮件、按职位规则表分群、发团队消息，并在 Windows 任务计划程序里登记每天的定时任务，所以浏览器关着也会跑。这里显示它的状态，设置在工作台里改。</div>
+    <div class="card">
+      <h2>状态</h2>
+      <div class="row"><div class="k">工作台插件</div><div id="rc_wb">检测中</div></div>
+      <div class="row"><div class="k">每日自动分发</div><div id="rc_cfg">—</div></div>
+      <div class="row"><div class="k">定时任务</div><div id="rc_task">—</div></div>
+      <div class="row"><div class="k">最近一次运行</div><div><pre class="reportbox" id="rc_last" style="margin:0;">—</pre></div></div>
+      <div class="toolbar" style="margin:10px 0 0;">
+        <button class="btn" id="rc_open">打开工作台去设置</button>
+        <button class="btn ghost" id="rc_refresh">刷新</button>
+      </div>
+      <div class="n" style="font-size:var(--fs-sm);color:var(--muted);margin-top:6px;">在工作台里：打开 Recruitment → 设置 → 自动分发。状态是工作台最后一次打开「自动分发」页时读到的，想看最新的就在工作台里点一次「刷新状态」。</div>
+    </div>
+  </div>
+
+  <!-- ============ 人才库 ============ -->
+  <div class="panel" id="p-talent">
+    <iframe id="talentFrame" data-src="../dashboard/dashboard.html" style="width:100%;height:calc(100vh - 140px);border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);"></iframe>
+  </div>
+
+  <!-- ============ 话术 ============ -->
+  <div class="panel" id="p-scripts">
+    <div class="note">占位符：{company} 公司名，{position} 当前JD标题，{name} 候选人姓名，{duties} 岗位职责。失焦后自动保存。</div>
+    <div class="tier">常用</div>
+    <div class="card">
+      <div class="grid">
+        <div class="field"><label>拒绝话术（自动，发给不合格者）</label><textarea id="sc_reject" style="min-height:110px;"></textarea></div>
+        <div class="field"><label>索要简历话术（自动，发给合格者）</label><textarea id="sc_request" style="min-height:110px;"></textarea></div>
+      </div>
+      <details class="adv">
+        <summary><b>高级设置</b><em>浮层固定话术（手动点按钮发送）</em></summary>
+        <div class="grid" style="margin-top:8px;">
+          <div class="field"><label>联系候选人</label><textarea id="sc_contact" style="min-height:100px;"></textarea></div>
+          <div class="field"><label>跟进</label><textarea id="sc_follow" style="min-height:100px;"></textarea></div>
+          <div class="field"><label>面试安排</label><textarea id="sc_interview" style="min-height:100px;"></textarea></div>
+          <div class="field"><label>岗位提问</label><textarea id="sc_questions" style="min-height:130px;"></textarea></div>
+        </div>
+        <div class="n" style="font-size:var(--fs-sm);color:var(--muted);">留空的话术不会出现在浮层按钮里。</div>
+      </details>
+      <div class="toolbar" style="margin:14px 0 0;">
+        <button class="btn ghost" id="btnResetScripts">恢复默认话术</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 排错 ============ -->
+  <!-- ============ v2.4.0 设置：左侧分组导航（可收起）+ 右侧单页内容 ============ -->
+  <div class="panel" id="p-debug">
+    <div class="set-layout" id="setLayout">
+      <aside class="set-nav" id="setNav" aria-label="设置导航">
+        <div class="set-nav-hd"><b>设置</b><button class="set-fold" id="setFold" type="button" aria-label="收起侧栏"><svg viewBox="0 0 24 24"><path d="M4 5v14"/><path d="M14 7l-5 5 5 5M9 12h11"/></svg></button></div>
+        <div class="set-find"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input id="setFind" type="text" placeholder="搜索设置项"></div>
+        <div class="set-list" id="setList">
+        <div class="set-g open" data-g="monitor">
+          <button class="set-gh" type="button"><span>运行监控</span><svg class="chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+          <div class="set-gl">
+            <a class="set-i" href="#set=runlog" data-sec="runlog" data-kw="日志 失败 成功 状态 运行中 休息 停止 原因 导出 CSV 清空"><svg viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></svg><span>运行记录</span><em class="set-bd" id="sbRunlog" hidden></em></a>
+          </div>
+        </div>
+        <div class="set-g open" data-g="exec">
+          <button class="set-gh" type="button"><span>执行方式</span><svg class="chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+          <div class="set-gl">
+            <a class="set-i" href="#set=rpa" data-sec="rpa" data-kw="Boss 执行 鼠标 键盘 速度 让位 脚本 助手 检测"><svg viewBox="0 0 24 24"><rect x="6.5" y="3" width="11" height="18" rx="5.5"/><path d="M12 7v3.5"/></svg><span>RPA 连接</span><i class="set-dot" id="sbRpa"></i></a>
+            <a class="set-i" href="#set=rhythm" data-sec="rhythm" data-kw="拟人 停顿 犹豫 节拍 小憩 速度 浮动 预设"><svg viewBox="0 0 24 24"><path d="M4 6.5h9M17 6.5h3M4 12h3M11 12h9M4 17.5h11M19 17.5h1"/><circle cx="15" cy="6.5" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17.5" r="2"/></svg><span>操作节奏</span></a>
+          </div>
+        </div>
+        <div class="set-g open" data-g="data">
+          <button class="set-gh" type="button"><span>数据与维护</span><svg class="chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+          <div class="set-gl">
+            <a class="set-i" href="#set=comp" data-sec="comp" data-kw="合规 个人信息 影响评估 保留期限 删除 自动决策 拒绝确认 AI 去标识 月报 审计"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5.5c0 4.4 3 7.9 7 9.5 4-1.6 7-5.1 7-9.5V6z"/><path d="m9 12 2 2 4-4"/></svg><span>合规</span><em class="set-bd" id="sbComp" hidden></em></a>
+            <a class="set-i" href="#set=backup" data-sec="backup" data-kw="导出 导入 撤销 换电脑 加密 全量 人才库 自动备份 恢复"><svg viewBox="0 0 24 24"><path d="M4 8h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 8l2-3.5h12L20 8"/><path d="M12 11v6M9.5 14.5 12 17l2.5-2.5"/></svg><span>备份与恢复</span></a>
+            <a class="set-i" href="#set=health" data-sec="health" data-kw="检查 报告 配置"><svg viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.2a4.2 4.2 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z"/><path d="M8.5 12h2l1-2 1.5 4 1-2h1.5"/></svg><span>健康自检</span></a>
+          </div>
+        </div>
+        <div class="set-g open" data-g="rules">
+          <button class="set-gh" type="button"><span>规则与诊断</span><svg class="chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+          <div class="set-gl">
+            <a class="set-i" href="#set=basedef" data-sec="basedef" data-kw="城市 年龄 学历 默认"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="1.5"/><path d="M9 4V2.8h6V4M8.5 10h7M8.5 14h5"/></svg><span>新岗位默认条件</span></a>
+            <a class="set-i" href="#set=chip" data-sec="chip" data-kw="芯片 半导体 识别词 排除词 行业"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.2"/><path d="M10 3.5V7M14 3.5V7M10 17v3.5M14 17v3.5M3.5 10H7M3.5 14H7M17 10h3.5M17 14h3.5"/></svg><span>芯片公司识别</span></a>
+            <a class="set-i" href="#set=sel" data-sec="sel" data-kw="选择器 诊断 改版 抓不到 日志"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></svg><span>选择器与诊断</span></a>
+            <a class="set-i" href="#set=evalset" data-sec="evalset" data-kw="评测 打标 标注 漏打 误打 准确 一致率 样本"><svg viewBox="0 0 24 24"><path d="M5 12.5l4 4L19 6.5"/><path d="M4 20h16"/></svg><span>评测集</span></a>
+            <a class="set-i" href="#set=kb" data-sec="kb" data-kw="知识库 叫法 同义词 方向 相近 职位 岗位"><svg viewBox="0 0 24 24"><path d="M5 4.5h11a3 3 0 0 1 3 3V20H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8.5h6"/></svg><span>岗位知识库</span></a>
+          </div>
+        </div>
+        <div class="set-g open" data-g="ui">
+          <button class="set-gh" type="button"><span>界面</span><svg class="chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+          <div class="set-gl">
+            <a class="set-i" href="#set=appearance" data-sec="appearance" data-kw="外观 深色 暗色 浅色 夜间 主题 跟随系统 侧边栏 收起"><svg viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 1 0 0 17z"/><circle cx="12" cy="12" r="8.5"/></svg><span>外观</span></a>
+          </div>
+        </div>
+          <div class="set-none" id="setNone" hidden>没有匹配的设置项</div>
+        </div>
+      </aside>
+      <div class="set-main" id="setMain">
+      <section class="set-sec" data-sec="runlog" id="p-runlog">
+        <div class="set-sh"><div class="set-sh-t"><h2>运行记录</h2><p class="set-sum">智选、打招呼每一个动作的结果和失败原因。只存在本机，保留 7 天、最多 3000 条</p></div>
+          <div class="set-sh-act"><span class="rl-live" id="rlLive" data-tip="新记录会自动出现在最上面"><i></i>实时</span><button class="btn ghost sm" id="rlExport" type="button" data-tip="按当前筛选导出">导出 CSV</button><button class="btn danger sm" id="rlClear" type="button">清空记录</button></div></div>
+        <div class="rl-strip" id="rlStatus"></div>
+        <div class="rl-alert" id="rlAlert" hidden></div>
+        <div class="card rl-card">
+          <div class="rl-sticky">
+          <div class="rl-head">
+            <div class="rl-tabs" id="rlTabs" role="tablist"></div>
+            <div class="rl-seg" id="rlRange" role="group" aria-label="时间范围"><button type="button" data-v="1h">近 1 小时</button><button type="button" data-v="today" class="on">今天</button><button type="button" data-v="7d">近 7 天</button></div>
+          </div>
+          <div class="rl-filters">
+            <select id="rlSite" aria-label="平台"><option value="">全部平台</option><option value="boss">Boss直聘</option><option value="liepin">猎聘</option></select>
+            <select id="rlMod" aria-label="模块"><option value="">全部模块</option><option value="智选">智选</option><option value="打招呼">打招呼</option><option value="简历收集">简历收集</option></select>
+            <select id="rlAct" aria-label="动作"><option value="">全部动作</option></select>
+            <select id="rlCat" aria-label="原因"><option value="">全部原因</option></select>
+            <div class="rl-q"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input id="rlQ" type="text" placeholder="搜候选人、职位、说明"></div>
+            <label class="rl-merge" data-tip="连续出现的同一种失败合并成一行，显示次数"><input type="checkbox" id="rlMerge" checked> 合并重复失败</label>
+            <a href="#" class="rl-reset" id="rlReset" hidden>清除筛选</a>
+            <span class="rl-count" id="rlCount"></span>
+          </div>
+          <div class="rl-row rl-th"><span>时间</span><span>来源</span><span>动作</span><span>对象</span><span>结果</span><span>原因 / 说明</span><span></span></div>
+          </div>
+          <div class="rl-list" id="rlBody" aria-live="polite" data-sk="rows:8"></div>
+          <div class="rl-more"><button class="btn ghost sm" id="rlMore" type="button" hidden>再显示 200 条</button></div>
+        </div>
+      </section>
+      <section class="set-sec" data-sec="rpa">
+        <div class="set-sh"><div class="set-sh-t"><h2>RPA 连接</h2><div class="desc">对 Boss 的「打招呼」和「智选」同时生效，猎聘不受影响。RPA = 本机 RPA 助手用真实鼠标键盘操作：拟人轨迹移动、真实点击、滚轮翻页、逐字打字，不挂浏览器调试器。运行时 Boss 窗口会被切到最前面，请不要动鼠标键盘；你一动它就让位，停手几秒后自动接手。</div><p class="set-sum">Boss 的打招呼和智选用本机 RPA 助手的真实鼠标键盘执行，猎聘不受影响</p></div></div>
+      <div class="card" id="cardRpa">
+        <div class="row">
+          <div class="k">执行方式</div>
+          <div><div class="seg" id="bossExecSeg"><button data-m="rpa">RPA 真实鼠标键盘</button><button data-m="script">脚本点击（旧版）</button></div></div>
+        </div>
+        <div class="row">
+          <div class="k">RPA 助手</div>
+          <div><button class="btn ghost" id="btnRpaPing">检测连接</button> <span id="rpaStatus" style="font-size:var(--fs-sm);">未检测</span>
+            <div class="n">第一次使用：打开插件文件夹里的 rpa-helper 文件夹，在资源管理器地址栏输入 cmd /k py install_autostart.py 回车（没有 py 就把 py 换成 python）。以后开机自动在后台运行，没有窗口。不要双击 .py 文件。</div></div>
+        </div>
+        <div class="row">
+          <div class="k">速度</div>
+          <div><select id="rpaSpeed"><option value="0.7">慢（更像人）</option><option value="1">正常</option><option value="1.4">快</option></select></div>
+        </div>
+        <div class="row">
+          <div class="k">让位时间</div>
+          <div><input id="rpaIdleSec" type="number" min="0" max="120" style="width:90px;"> 秒
+            <div class="n">你最后一次动鼠标或键盘之后，要停手多少秒 RPA 才接手。你在浮层里手动点「固定话术」、在人才库点「面试安排」时只等 1.5 秒。</div></div>
+        </div>
+      </div>
+      </section>
+      <section class="set-sec" data-sec="rhythm">
+        <div class="set-sh"><div class="set-sh-t"><h2>操作节奏</h2><div class="desc">让处理过程快慢不一、像手动点击一样会停顿。对 Boss 和猎聘的智选、打招呼都生效，改完立即生效，不打断正在跑的流程。停顿都有上限，小憩最长 5 分钟</div><p class="set-sum">动作间随机停顿、节拍浮动、定期小憩。改完立即生效，不打断正在跑的流程</p></div></div>
+      <div class="card" id="cardRhythm">
+        <div class="row">
+          <div class="k">拟人节奏</div>
+          <div><label class="chk"><input type="checkbox" id="rh_on"> 开启（关掉就回到固定节拍）</label>
+            <div class="rh-preset">快速套用：<span class="pchip" data-p="calm">稳妥（更慢更像人）</span><span class="pchip" data-p="def">默认</span><span class="pchip" data-p="fast">高效（停顿少）</span></div></div>
+        </div>
+        <div class="row">
+          <div class="k">动作间停顿</div>
+          <div><input id="rh_gapMin" type="number" step="0.1" min="0" max="10" class="rh-n"> ~ <input id="rh_gapMax" type="number" step="0.1" min="0" max="10" class="rh-n"> 秒
+            <div class="n">每次点击、打字、按键前随机停一下，多数时候偏短，偶尔偏长</div></div>
+        </div>
+        <div class="row">
+          <div class="k">偶尔犹豫</div>
+          <div><input id="rh_hesitatePct" type="number" step="1" min="0" max="50" class="rh-n"> % 的动作多停 <input id="rh_hesitateMin" type="number" step="0.5" min="0.5" max="20" class="rh-n"> ~ <input id="rh_hesitateMax" type="number" step="0.5" min="0.5" max="20" class="rh-n"> 秒
+            <div class="n">模拟看一眼、想一下再点。填 0 就不犹豫</div></div>
+        </div>
+        <div class="row">
+          <div class="k">节拍浮动</div>
+          <div>± <input id="rh_paceVar" type="number" step="5" min="0" max="60" class="rh-n"> %
+            <div class="n">每位候选人占用的时间在节拍上下浮动（例如节拍 20 秒、浮动 30%，实际在 17~26 秒之间），不再是固定间隔</div></div>
+        </div>
+        <div class="row">
+          <div class="k">小憩</div>
+          <div>每处理 <input id="rh_breakEveryMin" type="number" step="1" min="2" max="50" class="rh-n"> ~ <input id="rh_breakEveryMax" type="number" step="1" min="2" max="50" class="rh-n"> 人，休息 <input id="rh_breakMin" type="number" step="5" min="5" max="300" class="rh-n"> ~ <input id="rh_breakMax" type="number" step="5" min="5" max="300" class="rh-n"> 秒
+            <div class="n">人数和时长每次随机。只算真正打开会话或点了打招呼的人，看一眼就跳过的不算</div></div>
+        </div>
+        <div class="row">
+          <div class="k">速度浮动</div>
+          <div>± <input id="rh_speedVar" type="number" step="5" min="0" max="50" class="rh-n"> %
+            <label class="chk" style="margin-left:16px;"><input type="checkbox" id="rh_typePause"> 长话术分段打，段间偶尔停顿</label>
+            <div class="n">鼠标移动和打字速度每次在「速度」设置上快一点或慢一点（仅 Boss RPA）</div></div>
+        </div>
+        <div class="row">
+          <div class="k">预估</div>
+          <div><div id="rh_preview" class="rh-prev"></div>
+            <div class="toolbar" style="margin:8px 0 0;"><button class="btn ghost sm" id="rh_reset" type="button">恢复默认</button></div></div>
+        </div>
+      </div>
+      </section>
+      <section class="set-sec" data-sec="backup">
+        <div class="set-sh"><div class="set-sh-t"><h2>备份与恢复</h2><p class="set-sum">把全部设置导出成一个文件，换电脑、重装插件或给同事用时再导入</p></div></div>
+      <div class="card" id="backupCard">
+        <div class="row">
+          <div class="k">包含</div>
+          <div style="font-size:var(--fs-md);line-height:1.9;">计划任务、在招岗位（含基础条件、Job relevance、加分项、JD 原文、智选和打招呼的开关与上限）、智选和打招呼的运行设置、话术、公司名、归档设置、芯片公司识别词、执行时段、选择器
+            <div class="n">不包含：人才库候选人、简历文件、今日进度和打招呼记录、诊断日志。导入后运行模式一律设为「停止」，计划任务也会关闭，确认无误再手动打开。</div></div>
+        </div>
+        <div class="toolbar" style="margin:10px 0 0;">
+          <button class="btn" id="btnBackupExport">导出全部设置</button>
+          <button class="btn ghost" id="btnBackupImport">导入设置文件</button>
+          <button class="btn ghost" id="btnBackupPreset">导入内置岗位</button>
+          <button class="btn ghost" id="btnBackupUndo" style="display:none;">撤销上次导入</button>
+          <input type="file" id="backupFile" accept=".json" style="display:none;">
+        </div>
+        <div class="reportbox" id="backupPreview" style="display:none;margin-top:10px;"></div>
+        <div class="toolbar" id="backupConfirm" style="display:none;margin:10px 0 0;">
+          <button class="btn" id="btnBackupApply">确认导入（覆盖当前设置）</button>
+          <button class="btn ghost" id="btnBackupCancel">取消</button>
+        </div>
+      </div>
+      <div class="card fb-card" id="fullBackupCard">
+        <div class="fb-hd"><b>全量加密备份</b><span class="fb-age" id="fbAge"></span></div>
+        <p class="kb-sp">人才库、简历收集（可带 PDF 原件）、岗位、设置、评测集、决定记录全部打包成一个加密文件（.sfbak）。<b>卸载插件会清空本机所有数据</b>，换电脑、重装前先做一次。AI Key 不进备份</p>
+        <div class="row">
+          <div class="k">备份密码</div>
+          <div><input type="password" id="fbPw" autocomplete="new-password" placeholder="至少 8 位，字母和数字都要有" style="width:240px;"> <input type="password" id="fbPw2" autocomplete="new-password" placeholder="再输一次" style="width:160px;"> <button class="btn ghost sm" id="fbPwSave" type="button">保存密码</button>
+            <div class="n">密码存在本机插件里，每天自动备份时用。忘了密码，备份文件谁都打不开（插件也不能）。<span id="fbPwState"></span></div></div>
+        </div>
+        <div class="row">
+          <div class="k">每天自动备份</div>
+          <div><label class="chk"><input type="checkbox" id="fbAuto"> 每天自动做一份（不带 PDF）</label>
+            <div class="n">存到「简历收集 · 设置」里选的文件夹下的 SmartFilter-backup，只留最近 7 份。没选文件夹就存到浏览器下载目录的 SmartFilter-backup 里。<span id="fbWhere"></span></div></div>
+        </div>
+        <div class="toolbar" style="margin:10px 0 0;">
+          <button class="btn" id="fbMakePdf" type="button">立即备份（带 PDF）</button>
+          <button class="btn ghost" id="fbMake" type="button">立即备份（不带 PDF）</button>
+          <button class="btn ghost" id="fbRestore" type="button">从备份恢复</button>
+          <input type="file" id="fbFile" accept=".sfbak,.json" style="display:none;">
+        </div>
+        <div class="fb-rs" id="fbRs" hidden>
+          <div class="reportbox" id="fbRsInfo"></div>
+          <div class="toolbar" style="margin:8px 0 0;align-items:center;">
+            <input type="password" id="fbRsPw" placeholder="这份备份的密码" style="width:200px;">
+            <label class="chk"><input type="radio" name="fbMode" value="merge" checked> 合并（已有的不动，补进备份里多出来的）</label>
+            <label class="chk"><input type="radio" name="fbMode" value="replace"> 覆盖（换成备份里的）</label>
+            <button class="btn" id="fbRsGo" type="button">开始恢复</button>
+            <button class="btn ghost" id="fbRsCancel" type="button">取消</button>
+          </div>
+        </div>
+        <div class="reportbox" id="fbOut" hidden></div>
+      </div>
+      </section>
+      <section class="set-sec" data-sec="comp">
+        <div class="set-sh"><div class="set-sh-t"><h2>合规</h2><p class="set-sum">个人信息保护法要求：用候选人信息做自动筛选前先做影响评估，自动作出的决定要能说明、能人工复核，信息只保存必要的时间。这一页集中管这些</p></div>
+          <div class="set-sh-act"><button class="btn ghost sm" id="cpReport" type="button" data-tip="每月自动判了多少人、HR 确认和改判多少，只有数字，不含姓名">导出月度处理报告</button><button class="btn ghost sm" id="cpMaint" type="button" data-tip="立即做一次每天的检查：到期删除、清理过期记录、自动备份、更新选择器">立即检查一次</button></div></div>
+        <div class="cp-banner" id="cpBanner" hidden></div>
+        <div class="card cp-card" id="cpPia">
+          <b class="kb-st">个人信息影响评估登记</b><p class="kb-sp">第 55 条：用个人信息做自动化决策前要做影响评估，报告和处理情况记录至少保存 3 年（第 56 条）。评估报告做完、批准后在这里登记，没登记时工作台顶部会一直提醒</p>
+          <div class="cp-grid">
+            <label>评估报告版本<input type="text" id="piaVer" placeholder="例如 PIA-2026-01"></label>
+            <label>批准日期<input type="date" id="piaDate"></label>
+            <label>批准人<input type="text" id="piaBy" placeholder="姓名或职务"></label>
+            <label>下次复核<input type="date" id="piaNext"></label>
+            <label class="w">说明<input type="text" id="piaNote" placeholder="选填。例如：规则大改、换 AI 服务商、跨境传输时要重新评估"></label>
+          </div>
+          <div class="toolbar" style="margin:8px 0 0;"><button class="btn sm" id="piaSave" type="button">保存登记</button><span class="cp-st" id="piaState"></span></div>
+        </div>
+        <div class="card cp-card" id="cpAuto">
+          <b class="kb-st">自动决定</b><p class="kb-sp">第 24 条：个人可以要求说明自动决定，有权拒绝只由自动化作出的决定。插件每判一个人都会记一条决定记录（结论、原因、按哪几段工作判的、规则版本），人才库详情里可以生成说明、转人工复核</p>
+          <div class="row"><div class="k">不合格先给 HR 确认</div><div><label class="chk"><input type="checkbox" id="cpConfirm"> 智选判不合格的人先放进浮层「待确认」，HR 点确认后才发拒绝话术、点「不合适」（建议一直开着）</label><div class="n" id="cpPend"></div></div></div>
+          <div class="row"><div class="k">决定明细保留</div><div><input type="number" id="cpDays" min="30" max="1095" style="width:80px;"> 天<div class="n">默认 90 天，到期自动删。每月汇总只有数字、不含姓名，保留 3 年，满足第 56 条「处理情况记录至少保存三年」。处理记录（工作台「处理记录」）和决定明细一起到期</div></div></div>
+        </div>
+        <div class="card cp-card" id="cpRet">
+          <b class="kb-st">人才库保留期限</b><p class="kb-sp">第 19 条：保存期限应当为实现处理目的所必要的最短时间。每天检查一次，到期的人连同他的简历收集记录、PDF、已保存的简历文件、决定记录一起删掉</p>
+          <div class="row"><div class="k">到期自动删除</div><div><label class="chk"><input type="checkbox" id="retOn"> 开启</label></div></div>
+          <div class="row"><div class="k">期限</div><div>不合适 / 没沟通 <input type="number" id="retReject" min="30" max="3650" style="width:80px;"> 天，收到简历没面试 <input type="number" id="retResume" min="30" max="3650" style="width:80px;"> 天，面试 / 录用的按公司规定，插件不自动删
+            <div class="n">从最后一次处理（判定、改状态、收到简历）算起。已约面、已发 Offer 的人不会被删</div></div></div>
+          <div class="cp-counts" id="retCounts"></div>
+          <div id="retSoon"></div>
+          <div class="toolbar" style="margin:8px 0 0;"><button class="btn ghost sm" id="retRun" type="button">现在就删掉已到期的</button></div>
+        </div>
+        <div class="card cp-card" id="cpAi">
+          <b class="kb-st">AI 判断</b><p class="kb-sp">开了「简历详情 · AI 判断」时，简历文字会发给你填的 AI 接口。发出去之前先去掉能认出这个人的信息，并限制每天调用次数</p>
+          <div class="row"><div class="k">去标识</div><div><label class="chk"><input type="checkbox" id="aiRedact"> 发给 AI 前去掉姓名、手机、座机、邮箱、微信号、身份证号</label></div></div>
+          <div class="row"><div class="k">每天最多</div><div><input type="number" id="aiCap" min="0" max="5000" style="width:90px;"> 次 <span class="n" id="aiUsed"></span><div class="n">0 = 不限。超过上限当天改用关键词打分。AI 服务在境外时属于跨境提供个人信息，要先单独评估</div></div></div>
+        </div>
+        <div class="card cp-card" id="cpDel">
+          <b class="kb-st">按要求删除</b><p class="kb-sp">第 47 条：候选人要求删除时，删掉他在插件里的全部信息：人才库记录、简历收集记录和 PDF、已保存到文件夹或下载目录的简历文件、决定记录、处理记录、待确认</p>
+          <div class="toolbar" style="margin:0;"><input type="text" id="delQ" placeholder="输入姓名、手机号或邮箱查找" style="width:260px;"><button class="btn ghost sm" id="delFind" type="button">查找</button></div>
+          <div id="delList"></div>
+          <details class="cp-log"><summary>删除记录（只记删了多少，不记是谁）</summary><div id="delLog"></div></details>
+        </div>
+        <div class="card cp-card" id="cpMonth">
+          <b class="kb-st">每月处理汇总</b><p class="kb-sp">只有数字，保留 3 年。合规审计（第 54 条）和影响评估复核时用</p>
+          <div id="cpMonths"></div>
+        </div>
+        <div class="card cp-card" id="cpMerge" hidden>
+          <b class="kb-st">一个人一条记录</b><p class="kb-sp" id="cpMergeTxt"></p>
+          <div class="toolbar" style="margin:0;"><button class="btn ghost sm" id="cpUndoMerge" type="button">撤销合并</button></div>
+        </div>
+      </section>
+      <section class="set-sec" data-sec="appearance">
+        <div class="set-sh"><div class="set-sh-t"><h2>外观</h2><p class="set-sum">浅色、深色或跟随系统。工作台、报表、工具栏弹窗和 BOSS / 猎聘页面上的浮层一起变，平台页面本身不受影响</p></div></div>
+      <div class="card" id="cardAppearance">
+        <div class="ap-opts" id="apOpts" role="radiogroup" aria-label="外观">
+          <label class="ap-opt" data-m="system"><input type="radio" name="apTheme" value="system"><div class="ap-pv s"><i></i><em></em></div><b>跟随系统</b><span>电脑切到深色时自动变深色（默认）</span></label>
+          <label class="ap-opt" data-m="light"><input type="radio" name="apTheme" value="light"><div class="ap-pv l"><i></i><em><s></s><s></s><s></s></em></div><b>浅色</b><span>白天、投屏时用</span></label>
+          <label class="ap-opt" data-m="dark"><input type="radio" name="apTheme" value="dark"><div class="ap-pv d"><i></i><em><s></s><s></s><s></s></em></div><b>深色</b><span>晚上用不刺眼</span></label>
+        </div>
+        <div class="row" style="margin-top:16px;"><span class="k">侧边栏</span> <label style="margin-left:12px;"><input type="checkbox" id="apSideMini"> 收起成图标栏（内容区更宽）。也可以点侧边栏右上角的圆按钮</label></div>
+      </div>
+      </section>
+      <section class="set-sec" data-sec="health">
+        <div class="set-sh"><div class="set-sh-t"><h2>健康自检</h2><p class="set-sum">检查岗位、话术、公司名等配置是否齐全</p></div></div>
+      <div class="card" id="cardHealth">
+        <div class="toolbar">
+          <button class="btn" id="btnHealth">运行自检</button>
+          <button class="btn ghost" id="btnExportReport">导出自检报告</button>
+        </div>
+        <div class="reportbox" id="healthBox">点「运行自检」。</div>
+      </div>
+      </section>
+      <section class="set-sec" data-sec="basedef">
+        <div class="set-sh"><div class="set-sh-t"><h2>新岗位默认条件</h2><p class="set-sum">新建、抓取或导入的岗位，基础条件先按这里填。导入表里这几列留空就用默认值</p></div></div>
+      <div class="card" id="cardBaseDef">
+        <div class="grid" style="margin-top:8px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));">
+          <div class="field"><label>期望城市</label><input id="bd_city" type="text" placeholder="北京|上海"><div class="n">多个用 | 隔开</div></div>
+          <div class="field"><label>年龄上限</label><input id="bd_ageMax" type="number" min="16" max="70" placeholder="留空不限"></div>
+          <div class="field"><label>最低学历</label><select id="bd_edu"><option value="0">不限</option><option value="2">大专</option><option value="3">本科</option><option value="4">硕士</option><option value="5">博士</option></select></div>
+        </div>
+        <div class="toolbar" style="margin:10px 0 0;">
+          <button class="btn" id="btnSaveBaseDef">保存默认条件</button>
+          <button class="btn ghost" id="btnApplyBaseDef">填到现有岗位的空白项</button>
+        </div>
+      </div>
+      </section>
+      <section class="set-sec" data-sec="chip">
+        <div class="set-sh"><div class="set-sh-t"><h2>芯片公司识别</h2><div class="desc">岗位基础条件勾选「必须有芯片行业经历」时使用。候选人过往公司名里带识别词、且不带排除词，就算芯片公司</div><p class="set-sum">岗位勾选「必须有芯片行业经历」时，用这里的词判断候选人过往公司</p></div></div>
+      <div class="card" id="cardChip">
+        <div class="grid" style="margin-top:8px;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));">
+          <div class="field"><label>识别词（公司名里带任意一个就算芯片公司）</label><textarea id="chipWords" style="min-height:140px;"></textarea>
+            <div class="n">每行一个。除了「半导体、芯、微电子」这类字，也列了名字里不带这些字的常见芯片公司，如海思、展锐、韦尔</div></div>
+          <div class="field"><label>排除词（带「微」「芯」但不是芯片公司）</label><textarea id="chipExclude" style="min-height:140px;"></textarea>
+            <div class="n">每行一个。公司名里带排除词的不算，如微软、微信、微博</div></div>
+        </div>
+        <div class="toolbar" style="margin:10px 0 0;">
+          <button class="btn" id="btnSaveChip">保存识别规则</button>
+          <button class="btn ghost" id="btnResetChip">恢复内置名单</button>
+          <span style="font-size:var(--fs-sm);color:var(--muted);">公司名取自 Boss 顶部工作经历，被截断（显示成「…」）的部分读不到</span>
+        </div>
+      </div>
+      </section>
+      <section class="set-sec" data-sec="evalset">
+        <div class="set-sh"><div class="set-sh-t"><h2>评测集</h2><p class="set-sum">给打招呼判过的卡片标「该不该打」、智选判过的会话标「合不合格」，当作标准答案。换了判定规则、改了岗位知识库以后，看漏打率、误打率有没有变好</p></div>
+          <div class="set-sh-act"><label class="ev-collect"><input type="checkbox" id="evCollect"> 采集评测样本</label><button class="btn ghost sm" id="evBlind" type="button" data-tip="随机挑 20 张标过的，不看之前的标注再标一遍，看两次一不一致（目标 80% 以上）">盲测复核</button><button class="btn ghost sm" id="evImport" type="button" data-tip="把同事导出的评测集合进来，几个人分工打标">导入评测集</button><button class="btn ghost sm" id="evExport" type="button" data-tip="只导出标过的卡片，已去掉姓名、电话、邮箱。真实候选人的评测集放进代码的 tests/eval/local 文件夹（不进仓库），npm run eval 会用它">导出评测集</button><button class="btn danger sm" id="evClear" type="button">清空没标的</button><input type="file" id="evImportFile" accept=".json" style="display:none;"></div></div>
+      <div class="card ev-imp" id="evImp" hidden></div>
+      <div class="card ev-kpis" id="evKpi"></div>
+      <div class="card ev-cmp" id="evCmp" hidden></div>
+      <div class="card ev-work">
+        <div class="ev-bar">
+          <select id="evKind" aria-label="哪一类"><option value="card">打招呼卡片</option><option value="chat">智选会话</option></select>
+          <select id="evJob"><option value="">全部岗位</option></select>
+          <div class="rl-seg" id="evFlt" role="group" aria-label="看哪些"><button type="button" data-v="todo" class="on">没标的</button><button type="button" data-v="all">全部</button><button type="button" data-v="miss">漏打</button><button type="button" data-v="false">误打</button><button type="button" data-v="unsure">拿不准</button></div>
+          <label class="ev-show"><input type="checkbox" id="evShow"> 显示插件的判定</label>
+          <span class="ev-pos" id="evPos"></span>
+        </div>
+        <div class="ev-blindbar" id="evBlindBar" hidden></div>
+        <div class="ev-guide" id="evGuide"></div>
+        <div id="evCard" class="ev-card"></div>
+        <div class="ev-btns">
+          <button class="btn" type="button" data-l="yes">该打招呼 <kbd>Y</kbd></button>
+          <button class="btn ghost" type="button" data-l="no">不该打 <kbd>N</kbd></button>
+          <button class="btn ghost" type="button" data-l="unsure">拿不准 <kbd>U</kbd></button>
+          <span class="ev-sp"></span>
+          <button class="btn ghost sm" type="button" data-nav="-1">上一张 <kbd>←</kbd></button>
+          <button class="btn ghost sm" type="button" data-nav="1">下一张 <kbd>→</kbd></button>
+        </div>
+        <input id="evNote" type="text" placeholder="理由（选填）。拿不准的写一句，例如「SoC 平台验证算不算 IC 验证？」">
+      </div>
+      </section>
+      <section class="set-sec" data-sec="kb">
+        <div class="set-sh"><div class="set-sh-t"><h2>岗位知识库</h2><p class="set-sum">判断「做过本岗位」「和招聘岗位相关」时用的方向和叫法，打招呼、智选、简历详情共用这一份。方向可以自己加、自己删（内置的删了可以恢复），也可以给方向补充叫法，保存后已打开的 BOSS / 猎聘页面立即生效</p></div>
+          <div class="set-sh-act"><button class="btn sm" id="kbSave" type="button">保存修改</button></div></div>
+      <div class="card kb-add">
+        <b class="kb-st">新增方向</b><p class="kb-sp">招的岗位不在下面的方向里时（例如射频、光学、电源管理）在这里加。叫法写候选人职位名里常见的写法，相近方向写表格里和它挨着的方向，不写百分比按 60% 算</p>
+        <div class="kb-add-f">
+          <input type="text" id="kbNewName" placeholder="方向名称，例如：射频">
+          <select id="kbNewG" aria-label="大类"><option value="ic">芯片</option><option value="tech">其他技术</option><option value="biz">职能</option></select>
+          <input type="text" id="kbNewKw" placeholder="叫法，逗号隔开，例如：射频，RF工程师，RFIC">
+          <input type="text" id="kbNewNear" placeholder="相近方向（选填），例如：模拟设计 60%">
+          <button class="btn sm" id="kbNewAdd" type="button">加到知识库</button>
+        </div>
+      </div>
+      <div class="card" id="kbSuggest"></div>
+      <div class="card"><div id="kbTable"></div><div class="kb-removed" id="kbRemoved" hidden></div></div>
+      </section>
+      <section class="set-sec" data-sec="sel">
+        <div class="set-sh"><div class="set-sh-t"><h2>选择器与诊断</h2><p class="set-sum">平台改版、抓不到候选人时才需要</p></div></div>
+      <div class="card" id="cardSelRemote">
+        <b class="kb-st">远程选择器配置</b><p class="kb-sp">平台改版后由管理员改好选择器，放到自建配置服务器的一个 JSON 文件里。填上地址，每台电脑上的插件每天自动取一次，不用每个人重新装。只收选择器列表，别的内容一律不收。格式见 docs/RUNBOOK.md</p>
+        <div class="toolbar" style="margin:0;"><input type="text" id="selUrl" placeholder="https://example.com/smartfilter-selectors.json" style="flex:1;min-width:280px;"><button class="btn ghost sm" id="selUrlSave" type="button">保存地址</button><button class="btn ghost sm" id="selUrlNow" type="button">立即更新</button></div>
+        <div class="n" id="selRemoteState" style="margin-top:6px;"></div>
+      </div>
+      <div class="card" id="cardSel">
+        <div class="note">步骤：点「开启诊断模式」打开站点 → 页面左上出现诊断面板 → 点「点选元素修复选择器」→ 点页面上的候选人卡片 → 选一个生成的选择器保存 → 刷新站点页面。</div>
+        <div class="toolbar">
+          <button class="btn ghost" id="btnDiagBoss">开启诊断 · Boss直聘</button>
+          <button class="btn ghost" id="btnDiagLiepin">开启诊断 · 猎聘</button>
+          <button class="btn ghost" id="btnDiagOff">关闭诊断模式</button>
+          <button class="btn ghost" id="btnViewDiag">查看诊断日志</button>
+          <button class="btn ghost" id="btnClearDiag">清空诊断日志</button>
+        </div>
+        <div class="selgroup" data-site="boss">
+          <h3>Boss直聘</h3>
+          <div class="grid">
+            <div class="field"><label>候选人卡片</label><textarea data-k="cardSelectors"></textarea></div>
+            <div class="field"><label>姓名</label><textarea data-k="nameSelectors"></textarea></div>
+            <div class="field"><label>会话面板</label><textarea data-k="chatPanelSelectors"></textarea></div>
+            <div class="field"><label>消息输入框</label><textarea data-k="inputSelectors"></textarea></div>
+            <div class="field"><label>发送按钮</label><textarea data-k="sendSelectors"></textarea></div>
+            <div class="field"><label>索要简历按钮</label><textarea data-k="requestResumeSelectors"></textarea></div>
+          </div>
+        </div>
+        <div class="selgroup" data-site="liepin">
+          <h3>猎聘</h3>
+          <div class="grid">
+            <div class="field"><label>候选人卡片</label><textarea data-k="cardSelectors"></textarea></div>
+            <div class="field"><label>姓名</label><textarea data-k="nameSelectors"></textarea></div>
+            <div class="field"><label>会话面板</label><textarea data-k="chatPanelSelectors"></textarea></div>
+            <div class="field"><label>消息输入框</label><textarea data-k="inputSelectors"></textarea></div>
+            <div class="field"><label>发送按钮</label><textarea data-k="sendSelectors"></textarea></div>
+            <div class="field"><label>索取简历按钮</label><textarea data-k="requestResumeSelectors"></textarea></div>
+          </div>
+        </div>
+        <div class="toolbar">
+          <button class="btn" id="btnSaveSel">保存选择器</button>
+          <button class="btn ghost" id="btnRestoreSel">恢复默认选择器</button>
+          <span style="font-size:var(--fs-sm);color:var(--muted);">每行一个，按顺序尝试。保存后刷新站点页面生效。</span>
+        </div>
+        <div class="reportbox" id="diagBox" style="display:none;"></div>
+      </div>
+      </section>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<div class="toast" id="toast"></div>
+<aside class="cfg-drawer" id="cfgDrawer" aria-hidden="true"><div class="cfg-head"><b id="cfgTitle">配置</b><button class="drawer-x" type="button" data-drawer-close="cfg" aria-label="关闭"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="cfg-body" id="cfgBody"></div></aside>
+<script src="../services/store.js"></script>
+<script src="../services/site-config.js"></script>
+<script src="../services/plan.js"></script>
+<script src="../services/industry.js"></script>
+<script src="../services/job-kb.js"></script>
+<script src="../services/matcher.js"></script>
+<script src="../services/engine.js"></script>
+<script src="../services/eval.js"></script>
+<script src="../services/decision-log.js"></script>
+<script src="../services/people.js"></script>
+<script src="../services/backup.js"></script>
+<script src="../services/xlsx-lite.js"></script>
+<script src="../services/jd-sheet.js"></script>
+<script src="../ui/qtip.js"></script>
+<script src="../ui/empty.js"></script>
+<script src="../services/chat-target.js"></script>
+<script src="../services/resume-inbox.js"></script>
+<script src="../services/resume-db.js"></script>
+<script src="../services/save-dir.js"></script>
+<script src="../lib/pdf.min.js"></script>
+<script src="../services/pdf-text.js"></script>
+<script src="options.js"></script>
+<script src="greet.js"></script>
+<script src="sched.js"></script>
+<script src="publish.js"></script>
+<script src="rpa.js"></script>
+<script src="../services/rhythm.js"></script>
+<script src="../services/runlog.js"></script>
+<script src="rhythm-card.js"></script>
+<script src="settings-nav.js"></script>
+<script src="evalset.js"></script>
+<script src="compliance.js"></script>
+<script src="appearance.js"></script>
+<script src="runlog-page.js"></script>
+<script src="inbox.js"></script>
+<script src="../ui/shell.js"></script>
+</body>
+</html>

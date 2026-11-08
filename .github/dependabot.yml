@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels: ["dependencies", "chore"]
+
+  # 注：本项目的第三方库以 vendor 形式放在 lib/ 并由 VENDOR.json 记录 SHA256，
+  # 没有 package.json。升级第三方库请按 CONTRIBUTING.md 的流程更新 VENDOR.json
+  # 与 THIRD_PARTY_NOTICES.md。若后续引入 npm 依赖，可在此处增加 npm 配置项。

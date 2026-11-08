@@ -1,0 +1,273 @@
+{
+  "_说明": "lib/ 里第三方库的来源、版本、校验码。MV3 插件不能从网上加载代码，所以库文件必须放在插件里。npm run vendor:verify 核对文件没被改动，node tools/vendor.js update <package> <version> 升级",
+  "checkedAt": "2026-11-02",
+  "libs": [
+    {
+      "name": "PDF.js",
+      "package": "pdfjs-dist",
+      "version": "3.11.174",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/mozilla/pdf.js",
+      "use": "简历 PDF 抽文字（工作台、后台离屏页）",
+      "files": [
+        {
+          "path": "pdf.min.js",
+          "from": "legacy/build/pdf.min.js",
+          "sha256": "978fd1b2d134a98e98966186a97777bebf87d8e770dadab1ece3687e21a5aa6c",
+          "bytes": 377116
+        },
+        {
+          "path": "pdf.worker.min.js",
+          "from": "legacy/build/pdf.worker.min.js",
+          "sha256": "38cde5311957b86bc3669f93e7d2566de333a90055ed6635bef60d9bf00e96f2",
+          "bytes": 1133660
+        },
+        {
+          "path": "standard_fonts/FoxitDingbats.pfb",
+          "from": "standard_fonts/FoxitDingbats.pfb",
+          "sha256": "845c752392b6c914fb989c75a08b7792b88f542d2499042ef2889f8c814a16ed",
+          "bytes": 29513
+        },
+        {
+          "path": "standard_fonts/FoxitFixed.pfb",
+          "from": "standard_fonts/FoxitFixed.pfb",
+          "sha256": "b6c8fe53f134b8b6d4578cd2d544df4cee9624c4efa8d51a560fb40ea296101b",
+          "bytes": 17597
+        },
+        {
+          "path": "standard_fonts/FoxitFixedBold.pfb",
+          "from": "standard_fonts/FoxitFixedBold.pfb",
+          "sha256": "f1b7159702973f54fc86254ea38bcf3712b2a736eb3a0995751e9f4bb45ad603",
+          "bytes": 18055
+        },
+        {
+          "path": "standard_fonts/FoxitFixedBoldItalic.pfb",
+          "from": "standard_fonts/FoxitFixedBoldItalic.pfb",
+          "sha256": "8a000945843bd31add06aee63bf9fd41b7578b4f3242a4b7cd46349ad9d24d4d",
+          "bytes": 19151
+        },
+        {
+          "path": "standard_fonts/FoxitFixedItalic.pfb",
+          "from": "standard_fonts/FoxitFixedItalic.pfb",
+          "sha256": "5007faf8320fa1fcc08b8894b356ad976f60b992ba29ee5272578bbdebaf3876",
+          "bytes": 18746
+        },
+        {
+          "path": "standard_fonts/FoxitSerif.pfb",
+          "from": "standard_fonts/FoxitSerif.pfb",
+          "sha256": "4f57d2b9d884af8f907bf22df6019b52d86cbf6214fdbd02b1ae05472a543f35",
+          "bytes": 19469
+        },
+        {
+          "path": "standard_fonts/FoxitSerifBold.pfb",
+          "from": "standard_fonts/FoxitSerifBold.pfb",
+          "sha256": "0bdf4b04e964139818d51eda03d566ba999fc3ba2421b1c6c51f9dc969022e80",
+          "bytes": 19395
+        },
+        {
+          "path": "standard_fonts/FoxitSerifBoldItalic.pfb",
+          "from": "standard_fonts/FoxitSerifBoldItalic.pfb",
+          "sha256": "a406cac82583bf98175cb62c87ed5e95c45fbb34eece63a10b0a13e793cb2e10",
+          "bytes": 20733
+        },
+        {
+          "path": "standard_fonts/FoxitSerifItalic.pfb",
+          "from": "standard_fonts/FoxitSerifItalic.pfb",
+          "sha256": "610ae0687198045c4db5d1a6650fd5e92536631706382eb8b72e38df578d0ae9",
+          "bytes": 21227
+        },
+        {
+          "path": "standard_fonts/FoxitSymbol.pfb",
+          "from": "standard_fonts/FoxitSymbol.pfb",
+          "sha256": "47967d055530e7357088a08403115425643ec2cdfd6201ba8af0fbd7116c1539",
+          "bytes": 16729
+        },
+        {
+          "path": "standard_fonts/LICENSE_FOXIT",
+          "from": "standard_fonts/LICENSE_FOXIT",
+          "sha256": "b578cdd2345840ada550bd12519533812320d5f1d21cf4c1c7e1b1b0a31c98b7",
+          "bytes": 1553
+        },
+        {
+          "path": "standard_fonts/LICENSE_LIBERATION",
+          "from": "standard_fonts/LICENSE_LIBERATION",
+          "sha256": "93fed46019c38bbe566b479d22148e2e8a1e85ada614accb0211c37b2c61c19b",
+          "bytes": 4414
+        },
+        {
+          "path": "standard_fonts/LiberationSans-Bold.ttf",
+          "from": "standard_fonts/LiberationSans-Bold.ttf",
+          "sha256": "361c61b82d575c5c35fd9157fda8b0194bcfcd0d88ea8521a4fb5dd53d33dddc",
+          "bytes": 137052
+        },
+        {
+          "path": "standard_fonts/LiberationSans-BoldItalic.ttf",
+          "from": "standard_fonts/LiberationSans-BoldItalic.ttf",
+          "sha256": "a224075ac17495ad0a3af3bc0a419ac0704a8b3fd1095456201fb9b095fc281d",
+          "bytes": 135124
+        },
+        {
+          "path": "standard_fonts/LiberationSans-Italic.ttf",
+          "from": "standard_fonts/LiberationSans-Italic.ttf",
+          "sha256": "832b4406dbef23628800d3aaad21048534ac84d7e3ad955be83b8172ed8ef512",
+          "bytes": 162036
+        },
+        {
+          "path": "standard_fonts/LiberationSans-Regular.ttf",
+          "from": "standard_fonts/LiberationSans-Regular.ttf",
+          "sha256": "f8ace1f892b2bd9dc1792ba7f097fa7588f84fed48321480e04de5390828221f",
+          "bytes": 139512
+        }
+      ],
+      "note": "已用 npm 官方包逐字节核对一致（legacy 构建）"
+    },
+    {
+      "name": "ECharts",
+      "package": "echarts",
+      "version": "5.5.0",
+      "license": "Apache-2.0",
+      "homepage": "https://echarts.apache.org",
+      "use": "人才库与分析的图表",
+      "files": [
+        {
+          "path": "echarts.min.js",
+          "from": "dist/echarts.min.js",
+          "sha256": "42f8329d989b6f6539dd2b15bbdf0d82025762ac112fbb60dc57b27d7bcf3946",
+          "bytes": 1029203
+        }
+      ],
+      "note": "已用 npm 官方包逐字节核对一致（官方构建）"
+    },
+    {
+      "name": "jsPDF",
+      "package": "jspdf",
+      "version": "2.5.1",
+      "license": "MIT",
+      "homepage": "https://github.com/parallax/jsPDF",
+      "use": "导出 PDF",
+      "files": [
+        {
+          "path": "jspdf.umd.min.js",
+          "from": "dist/jspdf.umd.min.js",
+          "sha256": "98ccf17aa10c20bb1301762618fcc9b6ab3a4e7f26b6071d64d0b41154df3875",
+          "bytes": 364463
+        }
+      ],
+      "note": "已用 npm 官方包逐字节核对一致（官方构建）"
+    },
+    {
+      "name": "html2canvas",
+      "package": "html2canvas",
+      "version": "1.4.1",
+      "license": "MIT",
+      "homepage": "https://html2canvas.hertzen.com",
+      "use": "导出 PDF 时截图",
+      "files": [
+        {
+          "path": "html2canvas.min.js",
+          "from": "dist/html2canvas.min.js",
+          "sha256": "e87e550794322e574a1fda0c1549a3c70dae5a93d9113417a429016838eab8cb",
+          "bytes": 198689
+        }
+      ],
+      "note": "已用 npm 官方包逐字节核对一致（官方构建）"
+    },
+    {
+      "name": "docx",
+      "package": "docx",
+      "version": "8.5.0",
+      "license": "MIT",
+      "homepage": "https://github.com/dolanmiu/docx",
+      "use": "导出 Word 周报",
+      "files": [
+        {
+          "path": "docx.umd.js",
+          "from": "build/index.umd.js",
+          "sha256": "02d568d203c0180af37609bcf5ff6c0919d220f933a88ca896eba0556a08faad",
+          "bytes": 742858
+        }
+      ],
+      "note": "已用 npm 官方包逐字节核对一致（官方构建）"
+    },
+    {
+      "name": "mammoth",
+      "package": "mammoth",
+      "version": "1.6.0",
+      "license": "BSD-2-Clause",
+      "homepage": "https://github.com/mwilliamson/mammoth.js",
+      "use": "读 Word 简历",
+      "files": [
+        {
+          "path": "mammoth.browser.min.js",
+          "from": "mammoth.browser.min.js",
+          "sha256": "596ef52239e52d8ee3cee10b2ee4a72596abf900d0e4f468593f956e9f1809b0",
+          "bytes": 642759
+        }
+      ],
+      "note": "已用 npm 官方包逐字节核对一致（官方构建）"
+    },
+    {
+      "name": "Tesseract.js",
+      "package": "tesseract.js",
+      "version": "5.1.1",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/naptha/tesseract.js",
+      "use": "扫描版简历 OCR",
+      "files": [
+        {
+          "path": "tesseract/tesseract.min.js",
+          "from": "dist/tesseract.min.js",
+          "sha256": "a8e29918d098b2b06e1012bdaeffb4aec0445c5d5654709023e0bd1f442a80e8",
+          "bytes": 66695
+        },
+        {
+          "path": "tesseract/worker.min.js",
+          "from": "dist/worker.min.js",
+          "sha256": "aca1229639fc9907d86f96e825955a2b7c5716d17f3bc3acd71f9c7ab66181fc",
+          "bytes": 123724
+        }
+      ],
+      "note": "已用 npm 官方包逐字节核对一致（官方构建）"
+    },
+    {
+      "name": "Tesseract.js core（WASM）",
+      "package": "tesseract.js-core",
+      "version": "5.x（未能对上官方包）",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/naptha/tesseract.js-core",
+      "use": "OCR 引擎",
+      "note": "和 tesseract.js-core 最近 14 个正式版都对不上，可能当时取自别的构建或本地改过。以当前文件的校验码为准，下次升级 OCR 时从官方包重新取并回归测试",
+      "files": [
+        {
+          "path": "tesseract/tesseract-core.wasm.js",
+          "from": null,
+          "sha256": "08ca6770e9b3fd81b09b4854c1bd16d08aabae710d6ff0d255366689edb293f8",
+          "bytes": 978944
+        }
+      ]
+    },
+    {
+      "name": "Tesseract 语言包",
+      "package": "tessdata",
+      "version": "未记录",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/tesseract-ocr/tessdata",
+      "use": "OCR 中文简体、英文",
+      "note": "来源没有记录，以当前文件的校验码为准",
+      "files": [
+        {
+          "path": "tesseract/langs/chi_sim.traineddata.gz",
+          "from": null,
+          "sha256": "3aa140069a09796b8cb8d3ccd0c052e8ed67f20cddb24b70ffa3344b3b94346b",
+          "bytes": 1730011
+        },
+        {
+          "path": "tesseract/langs/eng.traineddata.gz",
+          "from": null,
+          "sha256": "18c1ac52b75e35d44735fb6c2a60acfaf23033524653200738e98f0243edb75b",
+          "bytes": 1984273
+        }
+      ]
+    }
+  ]
+}

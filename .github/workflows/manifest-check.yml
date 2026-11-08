@@ -1,0 +1,108 @@
+name: Manifest & supply-chain check
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+
+      - name: Validate package
+        run: |
+          python - <<'PY'
+          import os, re, json, hashlib, sys
+          E = []
+          def read(p): return open(p, encoding='utf-8', errors='replace').read()
+          def need(p):
+              if not os.path.isfile(p): E.append('missing file: ' + p)
+
+          for p in ['manifest.json', 'README.md', 'README.en.md', 'LICENSE', '.gitignore',
+                    'CONTRIBUTING.md', 'SECURITY.md', 'THIRD_PARTY_NOTICES.md',
+                    'data/preset-backup.json', 'data/README.md', 'lib/VENDOR.json',
+                    'docs/PRIVACY.md', 'docs/MODEL_CARD.md', 'docs/AUTOMATION.md']:
+              need(p)
+
+          m = json.loads(read('manifest.json'))
+          if m.get('manifest_version') != 3: E.append('manifest_version must be 3')
+          if not re.match(r'^\d+\.\d+\.\d+$', str(m.get('version', ''))): E.append('version must be x.y.z')
+          if not m.get('background', {}).get('service_worker'): E.append('MV3 service_worker missing')
+          tag = os.environ.get('GITHUB_REF_NAME', '')
+          if tag.startswith('v') and tag[1:] != m.get('version'):
+              E.append('tag %s != manifest version %s' % (tag, m.get('version')))
+
+          # 示例数据检查：必须是虚构示例，不含真实公司/薪资/年龄门槛
+          d = json.loads(read('data/preset-backup.json'))
+          if d.get('type') != 'settings-backup': E.append('preset type must be settings-backup')
+          s = d.get('settings', {})
+          if s.get('company') != '示例科技（Example Tech）': E.append('preset company is not the example company')
+          if s.get('ai', {}).get('key'): E.append('preset AI key must be empty')
+          if s.get('ai', {}).get('on'): E.append('preset AI must be off by default')
+          jds = d.get('jds', [])
+          if not jds: E.append('preset jds is empty')
+          for x in jds:
+              if not str(x.get('title', '')).startswith('示例'): E.append('non-example job title: ' + str(x.get('title')))
+              if x.get('base', {}).get('ageMax'): E.append('age threshold in example job: ' + str(x.get('title')))
+          if d.get('exportedAt') != '2026-01-01T00:00:00.000Z':
+              E.append('preset exportedAt is not the placeholder value (looks like a real export)')
+          if s.get('ageFilled'):
+              E.append('preset ageFilled must be false')
+
+          # 网页上传限制
+          total, big = 0, []
+          for root, dirs, fs in os.walk('.'):
+              dirs[:] = [x for x in dirs if x != '.git']
+              for f in fs:
+                  p = os.path.join(root, f); total += 1
+                  if os.path.getsize(p) > 25 * 1024 * 1024: big.append(p)
+          print('files:', total)
+          if big: E.append('over 25 MiB: ' + ', '.join(big))
+
+          # 残留内部信息 / 密钥 / 远程脚本 / 手机号
+          # 说明：这里只放「通用内部用语」的检测规则，不放具体公司名与真实薪资样例，
+          # 否则屏蔽词本身就会在公开仓库里泄露需要屏蔽的内容。
+          # 如需按公司名黑名单校验，请放在本地脚本或仓库 Secret 中，不要提交。
+          banned = re.compile(r'内网地址|公司内网|仅限公司|未经书面许可|发给维护人|截图发给|统招本科\s*\d+\s*岁以下', re.I)
+          hits = {'banned': [], 'remote': [], 'secret': [], 'phone': []}
+          for root, dirs, fs in os.walk('.'):
+              dirs[:] = [x for x in dirs if x not in ('.git', 'lib')]
+              for f in fs:
+                  if not f.endswith(('.js', '.html', '.json', '.md', '.txt', '.py', '.css')): continue
+                  p = os.path.join(root, f); t = read(p)
+                  if banned.search(t): hits['banned'].append(p)
+                  if re.search(r'<script[^>]+src=["\']https?://', t): hits['remote'].append(p)
+                  if re.search(r'sk-[A-Za-z0-9_-]{16,}|BEGIN [A-Z ]*PRIVATE KEY', t): hits['secret'].append(p)
+                  if re.search(r'(?<!\d)1[3-9]\d{9}(?!\d)', t): hits['phone'].append(p)
+          for k, v in hits.items():
+              if v: E.append(k + ': ' + ', '.join(sorted(set(v))[:5]))
+
+          # 第三方库校验码
+          v = json.loads(read('lib/VENDOR.json'))
+          n = 0
+          for lib in v.get('libs', []):
+              for f in lib.get('files', []):
+                  p = os.path.join('lib', f['path'])
+                  if not os.path.isfile(p): E.append('vendor missing: ' + p); continue
+                  if hashlib.sha256(open(p, 'rb').read()).hexdigest() != f.get('sha256'):
+                      E.append('vendor checksum mismatch: ' + p)
+                  n += 1
+          print('vendor checksums verified:', n)
+
+          if E:
+              print('\nFAILED:')
+              for e in E: print(' -', e)
+              sys.exit(1)
+          print('\nAll checks passed.')
+          PY
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}

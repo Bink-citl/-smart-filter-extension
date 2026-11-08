@@ -1,0 +1,181 @@
+{
+  "manifest_version": 3,
+  "name": "Smart Filter · 智能简历筛选助手",
+  "version": "3.6.0",
+  "description": "按自定义JD在Boss直聘/猎聘自动筛选沟通、在推荐牛人页按计划打招呼、抓取职位JD生成AI导入表。Boss 的打招呼和智选由本机 RPA 助手用真实鼠标键盘执行。数据全部保存在本地。",
+  "permissions": [
+    "storage",
+    "downloads",
+    "scripting",
+    "tabs",
+    "alarms",
+    "unlimitedStorage",
+    "debugger",
+    "management",
+    "offscreen"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "host_permissions": [
+    "https://www.zhipin.com/*",
+    "https://*.zhipin.com/*",
+    "https://www.liepin.com/*",
+    "https://*.liepin.com/*",
+    "https://*.bosszhipin.com/*",
+    "https://*.lietou-static.com/*",
+    "http://127.0.0.1/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Smart Filter",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "options_page": "options/options.html",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.liepin.com/*",
+        "https://*.liepin.com/*"
+      ],
+      "js": [
+        "content/open-hook.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://www.zhipin.com/*",
+        "https://*.zhipin.com/*"
+      ],
+      "js": [
+        "services/rhythm.js",
+        "services/runlog.js",
+        "services/job-kb.js",
+        "services/matcher.js",
+        "services/extractor.js",
+        "services/chat-target.js",
+        "services/site-config.js",
+        "services/industry.js",
+        "services/plan.js",
+        "services/resume-score.js",
+        "services/engine.js",
+        "services/decision-log.js",
+        "services/pdf-find.js",
+        "content/tokens.js",
+        "content/panel-ui.js",
+        "content/shared.js",
+        "content/boss.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://www.liepin.com/*",
+        "https://*.liepin.com/*"
+      ],
+      "js": [
+        "services/rhythm.js",
+        "services/runlog.js",
+        "services/job-kb.js",
+        "services/matcher.js",
+        "services/extractor.js",
+        "services/chat-target.js",
+        "services/site-config.js",
+        "services/industry.js",
+        "services/plan.js",
+        "services/resume-score.js",
+        "services/engine.js",
+        "services/decision-log.js",
+        "services/pdf-find.js",
+        "content/tokens.js",
+        "content/panel-ui.js",
+        "content/shared.js",
+        "content/pane-reader.js",
+        "content/liepin.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://www.zhipin.com/*",
+        "https://*.zhipin.com/*"
+      ],
+      "js": [
+        "services/rhythm.js",
+        "services/runlog.js",
+        "services/job-kb.js",
+        "services/matcher.js",
+        "services/industry.js",
+        "services/plan.js",
+        "services/resume-score.js",
+        "services/engine.js",
+        "services/decision-log.js",
+        "content/hrs-dom.js",
+        "content/tokens.js",
+        "content/panel-ui.js",
+        "content/boss-greet.js",
+        "content/job-fetch.js",
+        "content/job-publish.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "https://www.liepin.com/*",
+        "https://*.liepin.com/*"
+      ],
+      "js": [
+        "services/rhythm.js",
+        "services/runlog.js",
+        "services/job-kb.js",
+        "services/matcher.js",
+        "services/industry.js",
+        "services/plan.js",
+        "services/resume-score.js",
+        "services/engine.js",
+        "services/decision-log.js",
+        "content/hrs-dom.js",
+        "content/tokens.js",
+        "content/panel-ui.js",
+        "content/boss-greet.js",
+        "content/job-fetch.js",
+        "content/job-publish.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "https://*.zhipin.com/*",
+        "https://*.bosszhipin.com/*",
+        "https://*.liepin.com/*",
+        "https://*.lietou-static.com/*"
+      ],
+      "js": [
+        "services/pdf-find.js",
+        "content/pdf-sniff.js"
+      ],
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ]
+}

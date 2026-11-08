@@ -1,0 +1,37 @@
+name: 功能建议 / 规则模板
+description: 提出新能力，或贡献岗位筛选规则模板
+labels: ['enhancement']
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 类型
+      options: [新功能, 评分维度/权重改进, 岗位规则模板, 文档与示例, 企业部署能力, 其他]
+    validations:
+      required: true
+  - type: textarea
+    id: scenario
+    attributes:
+      label: 使用场景
+      description: 谁在什么情况下会遇到这个问题？越具体越好
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议方案
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 考虑过的替代方案 / 已知局限
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 确认
+      options:
+        - label: 我已搜索现有 Issue，确认不是重复建议
+          required: true
+        - label: 建议中不包含任何真实候选人或企业信息
+          required: true

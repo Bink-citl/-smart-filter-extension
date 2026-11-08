@@ -1,0 +1,57 @@
+name: Bug 报告
+description: 报告解析失败、评分异常或界面问题
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **请勿粘贴真实简历内容、姓名、手机号、邮箱、公司名或薪资。** 请改用合成数据复现；如必须提供样本，请先脱敏。
+  - type: input
+    id: version
+    attributes:
+      label: 扩展版本
+      description: 在 chrome://extensions 或设置页可见
+      placeholder: 3.6.0
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: 浏览器
+      options: [Chrome, Edge, Brave, 其他 Chromium]
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: 问题环节
+      options: [简历解析(PDF/DOCX/OCR), JD 抽取, 评分结果, 页面浮层, 自动化执行, RPA 助手, 导出/备份, 设置与权限, 其他]
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 1. … 2. … 3. …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望结果 / 实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 控制台报错（可选，请先脱敏）
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 确认
+      options:
+        - label: 我已搜索现有 Issue，确认不是重复报告
+          required: true
+        - label: 报告中不包含任何真实候选人或企业信息
+          required: true

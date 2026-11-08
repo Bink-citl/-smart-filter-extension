@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>Smart Filter</title>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1D63AE"/>
+      <stop offset=".6" stop-color="#0E2D55"/>
+      <stop offset="1" stop-color="#091A30"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#g)"/>
+  <rect x="4.75" y="4.75" width="118.5" height="118.5" rx="27.25" fill="none" stroke="#FFFFFF" stroke-opacity=".12" stroke-width="1.5"/>
+  <path d="M63 35H44A12 12 0 0 0 44 59H51A12.5 12.5 0 0 1 51 84H31" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M80 84V43A8 8 0 0 1 88 35H97M80 59H89" fill="none" stroke="#3CD3DC" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="102" cy="59" r="5.5" fill="#3CD3DC"/>
+</svg>

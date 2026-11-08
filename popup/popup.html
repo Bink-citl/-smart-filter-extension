@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<script src="../ui/theme-init.js"></script>
+<style>
+  *{box-sizing:border-box;}
+  body{min-width:var(--popup-min);max-width:var(--popup-max);margin:0;font:13px/1.6 "Microsoft YaHei",system-ui,sans-serif;color:var(--text);background:var(--bg);}
+  .head{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--line);}
+  .logo{width:32px;height:32px;border-radius:var(--r-md);}
+  .head h1{font-size:var(--fs-lg);margin:0;}
+  .head .ver{font-size:var(--fs-xs);color:var(--text-2);margin-left:4px;font-weight:400;}
+  .head .sub{font-size:var(--fs-xs);color:var(--text-2);}
+  .body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:10px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:10px 12px;}
+  .card .t{font-size:var(--fs-sm);color:var(--text-2);margin-bottom:6px;font-weight:600;}
+  .card .n{font-size:var(--fs-xs);color:var(--muted);margin-top:6px;}
+  .seg{display:flex;border:1px solid var(--field);border-radius:var(--r-md);overflow:hidden;}
+  .seg button{flex:1;border:none;background:var(--surface);padding:7px 0;font-size:var(--fs-md);cursor:pointer;color:var(--text-2);border-right:1px solid var(--field);}
+  .seg button:last-child{border-right:none;}
+  .seg button.on[data-m=stop]{background:var(--bg);color:var(--text);font-weight:600;}
+  .seg button.on[data-m=dry]{background:var(--warn-50);color:var(--warn-700);font-weight:600;}
+  .seg button.on[data-m=live]{background:var(--ok-50);color:var(--ok-700);font-weight:600;}
+  .pace{display:flex;align-items:center;gap:6px;}
+  .pace input{width:64px;padding:5px 6px;border:1px solid var(--field);border-radius:var(--r-sm);font-size:var(--fs-lg);text-align:center;}
+  .pace button{border:1px solid var(--field);background:var(--surface);border-radius:var(--r-sm);width:28px;height:28px;cursor:pointer;font-size:var(--fs-lg);}
+  .pace .u{color:var(--text-2);}
+  .pace .r{margin-left:auto;font-size:var(--fs-xs);color:var(--text-2);text-align:right;}
+  .presets{display:flex;gap:6px;margin-top:6px;}
+  .presets button{flex:1;border:1px solid var(--info-200);background:var(--info-50);color:var(--info-700);border-radius:var(--r-sm);padding:3px 0;font-size:var(--fs-xs);cursor:pointer;}
+  select{width:100%;padding:6px 8px;border:1px solid var(--field);border-radius:var(--r-md);font-size:var(--fs-md);background:var(--surface);}
+  .plan .r{display:flex;align-items:center;gap:6px;font-size:var(--fs-sm);padding:3px 0;}
+  .plan .r .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .plan .bar{width:70px;height:6px;background:var(--line);border-radius:var(--r-xs);overflow:hidden;position:relative;}
+  .plan .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--info);}
+  .plan .bar i.full{background:var(--ok-500);}
+  .plan .empty{font-size:var(--fs-sm);color:var(--warn);}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:8px;text-align:center;}
+  .stat b{display:block;font-size:var(--fs-xl);color:var(--text);}
+  .stat span{font-size:var(--fs-xs);color:var(--text-2);}
+  .status{font-size:var(--fs-sm);line-height:1.8;}
+  .ok{color:var(--ok);font-weight:600;} .warn{color:var(--warn);font-weight:600;} .bad{color:var(--bad-500);font-weight:600;}
+  .btns{display:flex;gap:8px;}
+  .btns button{flex:1;padding:8px 0;border-radius:var(--r-md);font-size:var(--fs-md);cursor:pointer;background:var(--surface);border:1px solid var(--field);}
+  .btns button.primary{background:var(--info);color:var(--on-color);border:none;}
+  .links{display:flex;gap:6px;margin-top:6px;}
+  .links button{flex:1;font-size:var(--fs-xs);padding:4px 0;border-radius:var(--r-sm);cursor:pointer;background:var(--surface-2);border:1px solid var(--field);}
+  .toast{position:fixed;left:12px;right:12px;bottom:10px;background:var(--overlay);color:var(--on-color);border-radius:var(--r-md);padding:6px 10px;font-size:var(--fs-sm);display:none;}
+  .toast.err{background:var(--bad-500);}
+</style>
+<link rel="stylesheet" href="../ui/tokens.css">
+<link rel="stylesheet" href="../ui/components.css">
+<link rel="stylesheet" href="../ui/theme.css">
+</head>
+<body class="hrs-pop">
+  <div class="head">
+    <img class="logo" src="../icons/logo-mark.svg" alt="Smart Filter">
+    <div>
+      <h1><span class="sf-word">Smart <em>Filter</em></span><span class="ver" id="ver"></span></h1>
+      <div class="sub" id="jdSub">未启用JD</div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="card" style="display:none;">
+      <div class="t">运行模式</div>
+      <div class="seg" id="modeSeg">
+        <button data-m="stop">停止</button>
+        <button data-m="dry">试运行</button>
+        <button data-m="live">正式运行</button>
+      </div>
+      <div class="n" id="modeNote"></div>
+    </div>
+
+    <div class="card" id="schedCard" style="display:none;">
+      <div class="t">计划任务</div>
+      <div class="n" id="schedInfo" style="margin-top:0;color:var(--text-2);"></div>
+    </div>
+
+    <div class="card" style="display:none;">
+      <div class="t">打招呼（推荐牛人页） <span id="greetInfo" style="font-weight:400;color:var(--muted);"></span></div>
+      <div class="seg" id="greetSeg">
+        <button data-m="stop">停止</button>
+        <button data-m="dry">试运行</button>
+        <button data-m="live">正式运行</button>
+      </div>
+      <div class="n">独立于沟通筛选。条件和每个岗位的上限在「打招呼 · 岗位计划」。</div>
+    </div>
+
+    <div class="card" style="display:none;">
+      <div class="t">筛选节拍</div>
+      <div class="pace">
+        <button id="dec">-</button>
+        <input id="pace" type="number" min="3" max="600">
+        <button id="inc">+</button>
+        <span class="u">秒/个</span>
+        <span class="r" id="paceRate"></span>
+      </div>
+      <div class="presets">
+        <button data-p="10">10秒</button>
+        <button data-p="20">20秒</button>
+        <button data-p="30">30秒</button>
+        <button data-p="60">60秒</button>
+      </div>
+      <div class="n">每位候选人从打开会话起算，至少占用这么多秒。改动立即生效，不用刷新页面。</div>
+    </div>
+
+    <!-- v1.9.17 首页只看今日智选、打招呼的扫 / 过 / 拒；点数字到人才库页看明细 -->
+    <div class="card">
+      <div class="t">今日智选 <span style="font-weight:400;color:var(--muted);">Boss + 猎聘</span></div>
+      <div class="stats" style="margin:4px 0 0;">
+        <div class="stat" data-go="screen-all"><b id="scScan">-</b><span>扫</span></div>
+        <div class="stat" data-go="screen-pass"><b id="scPass">-</b><span>过</span></div>
+        <div class="stat" data-go="screen-reject"><b id="scReject">-</b><span>拒</span></div>
+      </div>
+      <div class="n" id="scSplit" style="margin-top:4px;"></div>
+    </div>
+    <div class="card">
+      <div class="t">今日打招呼 <span style="font-weight:400;color:var(--muted);">Boss + 猎聘</span></div>
+      <div class="stats" style="margin:4px 0 0;">
+        <div class="stat" data-go="greet-all"><b id="grScan">-</b><span>扫</span></div>
+        <div class="stat" data-go="greet-pass"><b id="grPass">-</b><span>过</span></div>
+        <div class="stat" data-go="greet-reject"><b id="grReject">-</b><span>拒</span></div>
+      </div>
+      <div class="n" id="grSplit" style="margin-top:4px;"></div>
+    </div>
+    <div id="planList" style="display:none;"></div><span id="planWin" style="display:none;"></span>
+
+    <div class="card">
+      <div class="t">当前页面</div>
+      <div class="status" id="diagText">检测中</div>
+      <div class="links">
+        <button id="btnBoss">打开Boss沟通</button>
+        <button id="btnLiepin">打开猎聘</button>
+        <button id="btnRecheck">重新检测</button>
+      </div>
+    </div>
+
+    <div class="btns">
+      <button id="btnOpts" class="primary">打开工作台</button>
+      <button id="btnDash">人才库与分析</button>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+<script src="../services/industry.js"></script>
+<script src="../services/store.js"></script>
+<script src="../services/plan.js"></script>
+<script src="../ui/qtip.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+# 绝不把真实候选人数据、公司数据、密钥与备份提交到公开仓库
+
+# 真实数据与导出
+data/*
+!data/preset-backup.json
+!data/README.md
+*.sfbak
+*.bak
+real-resumes/
+private-data/
+rpa-helper.log
+*.log
+
+# 简历与报表产物
+*.pdf
+*.docx
+*.xlsx
+*.csv
+!examples/**/*.pdf
+!examples/**/*.docx
+
+# 密钥与本地配置
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.key
+secrets.json
+config.local.json
+
+# 扩展打包产物（用 GitHub Release 分发，不入库）
+*.zip
+*.crx
+dist/
+build/
+release/
+
+# 开发依赖
+node_modules/
+coverage/
+playwright-report/
+test-results/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp

@@ -1,0 +1,1245 @@
+{
+ "app": "Smart Filter",
+ "type": "settings-backup",
+ "format": 1,
+ "version": "1.9.54",
+ "exportedAt": "2026-01-01T00:00:00.000Z",
+ "settings": {
+  "activeJdId": "j_muzmj7226cro",
+  "ageFilled": false,
+  "ai": {
+   "key": "",
+   "model": "",
+   "on": false,
+   "url": ""
+  },
+  "autoExportPass": false,
+  "autoMarkRead": true,
+  "autoReject": true,
+  "autoRequest": true,
+  "baseDefaults": {
+   "ageMax": null,
+   "cities": "北京|上海",
+   "edu": 3
+  },
+  "bossExec": "rpa",
+  "chipExclude": null,
+  "chipWords": null,
+  "company": "示例科技（Example Tech）",
+  "confirmHighRisk": false,
+  "dailyCap": 0,
+  "diagMode": false,
+  "dryRun": false,
+  "exportByJd": true,
+  "exportFolder": "示例人才库",
+  "exportFormat": "pdf+docx",
+  "exportToCustomDir": false,
+  "greetDailyCap": 180,
+  "greetMode": "stop",
+  "greetOrder": [
+   "j_muzmj7226cro",
+   "j_muzmj722m59h",
+   "j_muzmj7225rrk",
+   "j_muzmj7224eg1",
+   "j_muzmj722fhzh",
+   "j_muzmj72275n6",
+   "j_muzmj722fx69",
+   "j_muzmj72299td",
+   "j_muzmj722oya0",
+   "j_muzmj722m6br",
+   "j_muzmj722mg7m",
+   "j_muzmj722fai5",
+   "j_mv0qtmjh39nf",
+   "j_mv0s9ab0dphd",
+   "j_mv126g34f7ds",
+   "j_mv126n0axu36",
+   "j_mv126tb3p18b",
+   "j_mv129m02qlpm",
+   "j_mv129rcxcezb",
+   "j_mv129viypqcp",
+   "j_mv12a9yeu7u4",
+   "j_mv12af7itnjj",
+   "j_mv12akbnalgf",
+   "j_mv1rllictqbz",
+   "j_mv1rudppbkn2",
+   "j_mv1ruhh9wjy1"
+  ],
+  "greetPaceSec": 10,
+  "greetPlatformFilter": true,
+  "greetTrustedClick": true,
+  "jobOrderSync": true,
+  "jobOrderSyncVersion": 1,
+  "masterEnabled": false,
+  "onlyUnrepliedCandidateMessages": true,
+  "paceJitter": true,
+  "paceSec": 10,
+  "planEnd": "18:00",
+  "planStart": "09:00",
+  "planWindowOn": false,
+  "position": "示例·嵌入式软件工程师",
+  "rateLimitSec": 20,
+  "rejectMode": "chat",
+  "rejectTapInappropriate": true,
+  "resumeAutoSave": true,
+  "rpaIdleSec": 5,
+  "rpaPort": 17861,
+  "rpaSpeed": 1,
+  "schedule": {
+   "autoOpen": true,
+   "enabled": false,
+   "greetMode": "live",
+   "order": "greet-screen",
+   "screenMode": "live",
+   "startAt": "23:00",
+   "steps": [
+    {
+     "mode": "live",
+     "task": "boss-greet"
+    },
+    {
+     "mode": "live",
+     "task": "liepin-greet"
+    }
+   ]
+  },
+  "scopeToActiveJd": true,
+  "scripts": {
+   "contact": "您好，我是【{company}】的招聘负责人，正在招聘【{position}】。请问您目前是在职看机会还是已离职？期望薪资和到岗时间大概是怎样的呢？（示例话术，请自行替换）",
+   "followup": "感谢您的回复！方便的话我们约个时间电话或视频沟通一下？（示例话术，请自行替换）",
+   "interview": "{name}您好，感谢您对【{company}】【{position}】岗位的关注。我们想邀请您参加面试，请问您这周哪个时间段方便？（示例话术，请自行替换）"
+  },
+  "showCardBadge": true,
+  "showPageOverlay": true,
+  "siteConfig": null,
+  "siteMode": {
+   "boss": {
+    "dryRun": false,
+    "greetMode": "live",
+    "masterEnabled": false
+   },
+   "liepin": {
+    "dryRun": false,
+    "greetMode": "live",
+    "masterEnabled": false
+   }
+  },
+  "smartUnreadFirst": true,
+  "version": 7,
+  "selectorConfigUrl": ""
+ },
+ "jds": [
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 1,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·嵌入式软件工程师 _ 示例城市",
+   "hardRequirements": [
+    "嵌入式|C|C++|RTOS"
+   ],
+   "id": "j_muzmj7226cro",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "optionalKeywords": [
+    "Linux|驱动|ARM|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "嵌入式软件工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "15-25K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss"
+   ],
+   "title": "示例·嵌入式软件工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 2,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·数字验证工程师 _ 示例城市",
+   "hardRequirements": [
+    "验证|UVM|SystemVerilog"
+   ],
+   "id": "j_muzmj722m59h",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "optionalKeywords": [
+    "覆盖率|断言|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "数字验证工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "schema": 5,
+   "title": "示例·数字验证工程师",
+   "salary": "20-30K·12薪"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 3,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·前端开发工程师 _ 示例城市",
+   "hardRequirements": [
+    "JavaScript|Vue|React"
+   ],
+   "id": "j_muzmj7225rrk",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "前端开发工程师",
+   "optionalKeywords": [
+    "TypeScript|工程化|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "前端开发工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "18-28K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss"
+   ],
+   "title": "示例·前端开发工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 4,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·后端开发工程师 _ 示例城市",
+   "hardRequirements": [
+    "Java|Spring|SQL"
+   ],
+   "id": "j_muzmj7224eg1",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "后端开发工程师",
+   "optionalKeywords": [
+    "微服务|Redis|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "后端开发工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "25-35K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss"
+   ],
+   "title": "示例·后端开发工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 5,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·测试开发工程师 _ 示例城市",
+   "hardRequirements": [
+    "测试|自动化|Python"
+   ],
+   "id": "j_muzmj722fhzh",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "测试开发工程师",
+   "optionalKeywords": [
+    "CI|用例|示例"
+   ],
+   "planEnabled": false,
+   "platformJob": "测试开发工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "12-20K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss"
+   ],
+   "title": "示例·测试开发工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 1,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·数据分析师 _ 示例城市",
+   "hardRequirements": [
+    "SQL|Python|数据"
+   ],
+   "id": "j_muzmj72275n6",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "optionalKeywords": [
+    "可视化|报表|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "数据分析师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "10-18K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin"
+   ],
+   "title": "示例·数据分析师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 2,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·产品经理 _ 示例城市",
+   "hardRequirements": [
+    "需求分析|PRD|产品设计"
+   ],
+   "id": "j_muzmj722fx69",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "optionalKeywords": [
+    "竞品分析|原型|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "产品经理",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "15-25K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss"
+   ],
+   "title": "示例·产品经理"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 3,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·招聘专员 _ 示例城市",
+   "hardRequirements": [
+    "招聘|面试|人才库"
+   ],
+   "id": "j_muzmj72299td",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "招聘专员",
+   "optionalKeywords": [
+    "沟通|渠道|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "招聘专员",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "20-30K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss"
+   ],
+   "title": "示例·招聘专员"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 4,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·人事主管 _ 示例城市",
+   "hardRequirements": [
+    "人力资源|绩效|薪酬"
+   ],
+   "id": "j_muzmj722oya0",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "人事主管",
+   "optionalKeywords": [
+    "组织发展|制度|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "人事主管",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "18-28K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss"
+   ],
+   "title": "示例·人事主管"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 5,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·行政专员 _ 示例城市",
+   "hardRequirements": [
+    "行政|后勤|办公"
+   ],
+   "id": "j_muzmj722m6br",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "行政专员",
+   "optionalKeywords": [
+    "流程|资产|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "行政专员",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "25-35K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss"
+   ],
+   "title": "示例·行政专员"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 1,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·编译器开发工程师 _ 示例城市",
+   "hardRequirements": [
+    "LLVM|编译器|C++"
+   ],
+   "id": "j_muzmj722mg7m",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "编译器开发工程师",
+   "optionalKeywords": [
+    "优化|IR|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "编译器开发工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "12-20K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss"
+   ],
+   "title": "示例·编译器开发工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 2,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·算法工程师 _ 示例城市",
+   "hardRequirements": [
+    "机器学习|Python|算法"
+   ],
+   "id": "j_muzmj722fai5",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "算法工程师",
+   "optionalKeywords": [
+    "模型|评估|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "算法工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "10-18K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss",
+    "liepin"
+   ],
+   "title": "示例·算法工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 3,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·DevOps 工程师 _ 示例城市",
+   "hardRequirements": [
+    "Docker|Kubernetes|CI"
+   ],
+   "id": "j_mv0qtmjh39nf",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "optionalKeywords": [
+    "监控|发布|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "DevOps 工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "15-25K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin",
+    "boss"
+   ],
+   "title": "示例·DevOps 工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 4,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·UI 设计师 _ 示例城市",
+   "hardRequirements": [
+    "Figma|界面|交互"
+   ],
+   "id": "j_mv0s9ab0dphd",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "UI 设计师",
+   "optionalKeywords": [
+    "设计规范|组件|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "UI 设计师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "20-30K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin"
+   ],
+   "title": "示例·UI 设计师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 5,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·技术支持工程师 _ 示例城市",
+   "hardRequirements": [
+    "客户|排障|沟通"
+   ],
+   "id": "j_mv126g34f7ds",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "技术支持工程师",
+   "optionalKeywords": [
+    "文档|培训|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "技术支持工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "18-28K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss",
+    "liepin"
+   ],
+   "title": "示例·技术支持工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 1,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·项目管理员 _ 示例城市",
+   "hardRequirements": [
+    "项目管理|排期|敏捷"
+   ],
+   "id": "j_mv126n0axu36",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "项目管理员",
+   "optionalKeywords": [
+    "风险|里程碑|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "项目管理员",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "25-35K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss",
+    "liepin"
+   ],
+   "title": "示例·项目管理员"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 2,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·安全工程师 _ 示例城市",
+   "hardRequirements": [
+    "安全|漏洞|合规"
+   ],
+   "id": "j_mv126tb3p18b",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "安全工程师",
+   "optionalKeywords": [
+    "审计|加固|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "安全工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "12-20K·12薪",
+   "schema": 5,
+   "sources": [
+    "boss"
+   ],
+   "title": "示例·安全工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 3,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·数据库管理员 _ 示例城市",
+   "hardRequirements": [
+    "SQL|数据库|备份"
+   ],
+   "id": "j_mv129m02qlpm",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "数据库管理员",
+   "optionalKeywords": [
+    "调优|容灾|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "数据库管理员",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "10-18K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin"
+   ],
+   "title": "示例·数据库管理员"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 4,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·实习生（软件） _ 示例城市",
+   "hardRequirements": [
+    "计算机|基础|学习"
+   ],
+   "id": "j_mv129rcxcezb",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "实习生（软件）",
+   "optionalKeywords": [
+    "协作|文档|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "实习生（软件）",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "15-25K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin"
+   ],
+   "title": "示例·实习生（软件）"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 5,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·实习生（人事） _ 示例城市",
+   "hardRequirements": [
+    "人事|行政|协助"
+   ],
+   "id": "j_mv129viypqcp",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "optionalKeywords": [
+    "整理|沟通|示例"
+   ],
+   "planEnabled": false,
+   "platformJob": "实习生（人事）",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "20-30K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin"
+   ],
+   "title": "示例·实习生（人事）"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 1,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·硬件工程师 _ 示例城市",
+   "hardRequirements": [
+    "电路|原理图|硬件"
+   ],
+   "id": "j_mv12a9yeu7u4",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "硬件工程师",
+   "optionalKeywords": [
+    "调试|测试|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "硬件工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "18-28K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin"
+   ],
+   "title": "示例·硬件工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 2,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·固件工程师 _ 示例城市",
+   "hardRequirements": [
+    "固件|C|驱动"
+   ],
+   "id": "j_mv12af7itnjj",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "固件工程师",
+   "optionalKeywords": [
+    "Bootloader|调试|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "固件工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "25-35K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin"
+   ],
+   "title": "示例·固件工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 3,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·质量工程师 _ 示例城市",
+   "hardRequirements": [
+    "质量|流程|ISO"
+   ],
+   "id": "j_mv12akbnalgf",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "质量工程师",
+   "optionalKeywords": [
+    "审核|改进|示例"
+   ],
+   "planEnabled": true,
+   "platformJob": "质量工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "12-20K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin"
+   ],
+   "title": "示例·质量工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 4,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·客户成功经理 _ 示例城市",
+   "hardRequirements": [
+    "客户|续约|沟通"
+   ],
+   "id": "j_mv1rllictqbz",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "客户成功经理",
+   "optionalKeywords": [
+    "满意度|培训|示例"
+   ],
+   "planEnabled": false,
+   "platformJob": "客户成功经理",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "10-18K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin"
+   ],
+   "title": "示例·客户成功经理"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 5,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·技术文档工程师 _ 示例城市",
+   "hardRequirements": [
+    "文档|写作|技术"
+   ],
+   "id": "j_mv1rudppbkn2",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "技术文档工程师",
+   "optionalKeywords": [
+    "中英|规范|示例"
+   ],
+   "planEnabled": false,
+   "platformJob": "技术文档工程师",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "15-25K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin"
+   ],
+   "title": "示例·技术文档工程师"
+  },
+  {
+   "base": {
+    "ageMax": null,
+    "ageMin": null,
+    "chip": false,
+    "cities": "北京|上海",
+    "edu": 3,
+    "exp": 1,
+    "from": ""
+   },
+   "dailyQuota": 0,
+   "greet": {
+    "bonus": [],
+    "enabled": false,
+    "hard": [],
+    "quota": 0,
+    "same": true
+   },
+   "greetJob": "示例·运营专员 _ 示例城市",
+   "hardRequirements": [
+    "运营|内容|活动"
+   ],
+   "id": "j_mv1ruhh9wjy1",
+   "jdText": "【示例岗位 · 虚构数据，非真实招聘信息】\n【岗位职责】\n1、参与示例产品的需求分析与方案设计\n2、负责示例模块的开发、自测与文档编写\n3、与示例团队协同推进版本交付与复盘\n【岗位要求】\n1、具备相关领域基础知识与项目实践\n2、具备良好的沟通协作与问题定位能力\n3、本条为演示用 JD，不含任何真实企业或候选人信息",
+   "liepinJob": "运营专员",
+   "optionalKeywords": [
+    "数据|增长|示例"
+   ],
+   "planEnabled": false,
+   "platformJob": "运营专员",
+   "quota": {
+    "bossGreet": 0,
+    "bossScreen": 0,
+    "liepinGreet": 0,
+    "liepinScreen": 0
+   },
+   "salary": "20-30K·12薪",
+   "schema": 5,
+   "sources": [
+    "liepin"
+   ],
+   "title": "示例·运营专员"
+  }
+ ]
+}

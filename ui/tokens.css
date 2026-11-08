@@ -1,0 +1,228 @@
+/* =====================================================================
+   Smart Filter 设计令牌 v2.9.0（唯一来源）
+   - 所有颜色、圆角、字号、间距、阴影、页面宽度只在这里定义
+   - 工作台 / 报表 / 弹窗用 :root；BOSS、猎聘页面上的浮层用 :host（浮层在隔离层里）
+   - 浅色在第一段，深色在最后一段（[data-theme="dark"]）。每个颜色都有深色值
+     ui/theme-init.js 和 content/panel-ui.js 按「设置 → 外观」把 data-theme 设成 light 或 dark（跟随系统时按系统算）
+   - 浮层用的副本 content/tokens.js 由 tools/sync-tokens.js 从本文件生成，测试会检查两边一致
+   - 换主色：只改下面 --brand 这一组
+   - 断点三档：960 / 1200 / 1440（媒体查询里不能用变量，写在 theme.css 里，数字只用这三个）
+   ===================================================================== */
+:root, :host {
+  color-scheme: light;
+
+  /* 品牌：深海蓝（侧边栏偏暗黑） */
+  --brand-900: #0A1A2E;   /* 侧边栏、深底、提示气泡 */
+  --brand-700: #0B3A6E;
+  --brand: #0B3A6E;       /* 主按钮、链接、选中文字 */
+  --brand-600: #124C8A;   /* 主色悬停 */
+  --brand-300: #9DB3CB;
+  --brand-100: #D6E2F0;
+  --brand-50: #EEF3F9;    /* 选中行、选中 Tab 的浅底 */
+
+  /* 辅助：硅青（选中指示、数据高亮、打招呼浮层） */
+  --accent-700: #0F766E;
+  --accent: #0E9AA7;
+  --accent-300: #99F6E4;
+  --accent-100: #CCFBF1;
+  --accent-50: #E7F5F6;
+
+  /* 信息：蓝（智选浮层、提示） */
+  --info-700: #1D4ED8;
+  --info: #2563EB;
+  --info-200: #BFDBFE;
+  --info-50: #EFF6FF;
+
+  /* 状态色：只用于状态反馈，不做装饰 */
+  --ok-700: #166534;
+  --ok: #157F3B;
+  --ok-500: #16A34A;
+  --ok-200: #BFE3CB;
+  --ok-50: #E8F5EC;
+  --warn-700: #92400E;
+  --warn: #A8620A;
+  --warn-500: #E0A43B;
+  --warn-200: #FDE68A;
+  --warn-50: #FBF3E4;
+  --bad-700: #991B1B;
+  --bad: #B42318;
+  --bad-500: #DC2626;
+  --bad-200: #F2D2CE;
+  --bad-50: #FCEDEB;
+  --violet: #6D28D9;
+  --violet-200: #D2C6EF;
+  --violet-50: #F4F0FC;
+
+  /* 灰阶：文字 3 级、线 3 级、背景 3 级 */
+  --text: #18212E;
+  --text-2: #4A5568;
+  --muted: #8792A2;
+  --field: #C9D2DD;
+  --line: #E2E7EE;
+  --line-2: #EEF1F5;
+  --bg: #F2F4F7;          /* 页面底色 */
+  --surface-2: #F6F8FA;
+  --field-bg: #F1F4F8;    /* 输入框淡灰底 */
+  --surface: #FFFFFF;
+  --on-color: #FFFFFF;    /* 深色底上的文字，暗色模式下也保持白色 */
+  --overlay: #1E293B;     /* 提示气泡、深色浮条 */
+  /* 深色底（高亮指标卡、加载动画）上用的亮色 */
+  --on-dark-accent: #5FD3DC;
+  --on-dark-up: #7FE0A3;
+  --on-dark-down: #FFA39A;
+
+  /* 简历文件状态：已保存 / 未保存 / 缺字段 / 没文件 */
+  --st-saved: #1F8A4C;
+  --st-unsaved: #3D7CC9;
+  --st-miss: #E0A43B;
+  --st-nofile: #C2412D;
+
+  /* 图表：系列色 6 个 + 状态 + 网格 */
+  --chart-1: #0B3A6E;
+  --chart-2: #0E9AA7;
+  --chart-3: #5D7FA8;
+  --chart-4: #9DB3CB;
+  --chart-5: #4A5568;
+  --chart-6: #2F6690;
+  --chart-ok: #157F3B;
+  --chart-warn: #C98A1B;
+  --chart-bad: #B42318;
+  --chart-coral: #C7685F;
+  --chart-axis: #8792A2;
+  --chart-grid: #EDF0F4;
+
+  /* 品牌外观：主按钮渐变、焦点环、侧边栏电路纹理 */
+  --grad-brand: linear-gradient(180deg, #164E8D 0%, #0B3A6E 100%);
+  --grad-brand-hover: linear-gradient(180deg, #1B5A9F 0%, #0F457F 100%);
+  --grad-side: linear-gradient(180deg, #0C2038 0%, #08141F 100%);
+  --ring: 0 0 0 3px rgba(14, 154, 167, .28);
+  --chip-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' fill='none' stroke='white' stroke-opacity='.055' stroke-width='1'%3E%3Cpath d='M0 28h44l12 12h34l12-12h38M28 0v18l12 12M98 140v-34l-12-12H62M140 84h-26l-10 10v46M0 112h22l10-10h18'/%3E%3Ccircle cx='44' cy='28' r='2.2'/%3E%3Ccircle cx='102' cy='28' r='2.2'/%3E%3Ccircle cx='62' cy='94' r='2.2'/%3E%3Ccircle cx='114' cy='84' r='2.2'/%3E%3Ccircle cx='50' cy='102' r='2.2'/%3E%3C/svg%3E");
+
+  /* 圆角 4 档 */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-pill: 999px;
+  --r: var(--r-sm);
+  --rc: 12px;             /* 卡片圆角 */
+
+  /* 字号 6 档 */
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-md: 13px;
+  --fs-lg: 15px;
+  --fs-xl: 18px;
+  --fs-2xl: 24px;
+
+  /* 间距（4 的倍数） */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+
+  /* 阴影 3 档 */
+  --sh-1: 0 1px 2px rgba(15, 23, 42, .06);
+  --sh-2: 0 4px 14px rgba(15, 23, 42, .10);
+  --sh-3: 0 10px 30px rgba(15, 23, 42, .16);
+  --soft: 0 1px 2px rgba(16, 24, 40, .04), 0 1px 8px rgba(16, 24, 40, .03);   /* 卡片极淡阴影 */
+
+  /* 动画 */
+  --dur-fast: .15s;
+  --dur: .25s;
+
+  /* 尺寸 */
+  --h: 30px;              /* 按钮、输入框高度 */
+  --side: 208px;          /* 工作台左侧导航宽度 */
+  --top: 56px;            /* 顶栏高度 */
+  --page-max: 1600px;     /* 工作台、报表内容区最大宽度（以前写死 1280） */
+  --popup-min: 360px;     /* 工具栏弹窗宽度范围（以前写死 340） */
+  --popup-max: 420px;
+
+  --font: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+  --font-mono: Consolas, "Microsoft YaHei", monospace;
+  --font-brand: "Segoe UI", "Inter", "Helvetica Neue", Arial, "Microsoft YaHei", sans-serif;   /* 字标 Smart Filter */
+}
+
+/* =====================================================================
+   深色：深蓝偏暗黑。底色分三层（页面 / 卡片 / 输入框），状态色提亮，浅底换成深色调底
+   ===================================================================== */
+:root[data-theme="dark"], :host([data-theme="dark"]) {
+  color-scheme: dark;
+
+  --brand-900: #070D16;
+  --brand-700: #9CC0F0;
+  --brand: #4F8BD6;
+  --brand-600: #437FCB;
+  --brand-300: #3B5D86;
+  --brand-100: #1B3150;
+  --brand-50: #14243A;
+
+  --accent-700: #6FE0DE;
+  --accent: #1BA8B3;
+  --accent-300: #2B8A8F;
+  --accent-100: #12403F;
+  --accent-50: #0F2B30;
+
+  --info-700: #9DBDFF;
+  --info: #5B8DEF;
+  --info-200: #23407A;
+  --info-50: #142545;
+
+  --ok-700: #86E0A8;
+  --ok: #2FA563;
+  --ok-500: #3DBE72;
+  --ok-200: #1D4A30;
+  --ok-50: #102A1C;
+  --warn-700: #F2C77E;
+  --warn: #C98A1E;
+  --warn-500: #E0A43B;
+  --warn-200: #4D3A12;
+  --warn-50: #2B210D;
+  --bad-700: #FFA69C;
+  --bad: #D9574A;
+  --bad-500: #E86A5C;
+  --bad-200: #57261F;
+  --bad-50: #2E1614;
+  --violet: #9B7BF0;
+  --violet-200: #3B3070;
+  --violet-50: #1F1937;
+
+  --text: #E6ECF4;
+  --text-2: #AAB6C7;
+  --muted: #7D8A9D;
+  --field: #34445B;
+  --line: #263244;
+  --line-2: #1D2736;
+  --bg: #0D141F;
+  --surface-2: #18222F;
+  --field-bg: #1A2432;
+  --surface: #131C29;
+  --on-color: #FFFFFF;
+  --overlay: #273448;
+
+  --st-saved: #3DBE72;
+  --st-unsaved: #5B95E6;
+  --st-miss: #E0A43B;
+  --st-nofile: #E06A55;
+
+  --chart-1: #5B93DB;
+  --chart-2: #22B5C0;
+  --chart-3: #7E9CC4;
+  --chart-4: #4C6688;
+  --chart-5: #A6B2C3;
+  --chart-6: #5C8FC0;
+  --chart-ok: #3DBE72;
+  --chart-warn: #E0A43B;
+  --chart-bad: #E5675A;
+  --chart-coral: #E08A80;
+  --chart-axis: #7D8A9D;
+  --chart-grid: #212C3B;
+
+  --grad-brand: linear-gradient(180deg, #5893DC 0%, #3F78C2 100%);
+  --grad-brand-hover: linear-gradient(180deg, #66A0E6 0%, #4A84CF 100%);
+  --grad-side: linear-gradient(180deg, #0A1220 0%, #060B12 100%);
+  --ring: 0 0 0 3px rgba(34, 181, 192, .35);
+
+  --sh-1: 0 1px 2px rgba(0, 0, 0, .45);
+  --sh-2: 0 4px 14px rgba(0, 0, 0, .45);
+  --sh-3: 0 10px 30px rgba(0, 0, 0, .55);
+  --soft: 0 0 0 1px rgba(255, 255, 255, .04), 0 1px 8px rgba(0, 0, 0, .35);
+}

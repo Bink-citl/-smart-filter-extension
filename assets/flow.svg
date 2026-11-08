@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 210" width="900" height="210" role="img">
+<title>Smart Filter 处理流程示意</title>
+<desc>岗位 JD 与简历在本地解析，经可解释规则评分，生成决定记录并导出，全程不上传数据。</desc>
+<rect x="0" y="0" width="900" height="210" rx="12" fill="#ffffff" stroke="#d0d7de" stroke-width="1"/>
+<text x="24" y="30" font-family="-apple-system,Segoe UI,Microsoft YaHei,sans-serif" font-size="14" font-weight="600" fill="#1f2328">Smart Filter 处理流程</text>
+<text x="24" y="49" font-family="-apple-system,Segoe UI,Microsoft YaHei,sans-serif" font-size="12" fill="#57606a">流程示意（非界面截图）· 全部步骤在浏览器本机完成</text>
+
+<g font-family="-apple-system,Segoe UI,Microsoft YaHei,sans-serif">
+  <rect x="24" y="72" width="150" height="66" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+  <text x="99" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#0969da">岗位 JD + 简历</text>
+  <text x="99" y="120" text-anchor="middle" font-size="11" fill="#57606a">PDF / DOCX / OCR</text>
+
+  <rect x="204" y="72" width="150" height="66" rx="8" fill="#ddf4ff" stroke="#0969da" stroke-width="1"/>
+  <text x="279" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#0969da">本地解析</text>
+  <text x="279" y="120" text-anchor="middle" font-size="11" fill="#57606a">结构化抽取</text>
+
+  <rect x="384" y="72" width="150" height="66" rx="8" fill="#fff8c5" stroke="#9a6700" stroke-width="1"/>
+  <text x="459" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#7d4e00">可解释评分</text>
+  <text x="459" y="120" text-anchor="middle" font-size="11" fill="#57606a">命中条件 + 规则版本</text>
+
+  <rect x="564" y="72" width="150" height="66" rx="8" fill="#dafbe1" stroke="#1a7f37" stroke-width="1"/>
+  <text x="639" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#1a7f37">决定记录</text>
+  <text x="639" y="120" text-anchor="middle" font-size="11" fill="#57606a">人工复核 · 可审计</text>
+
+  <rect x="744" y="72" width="132" height="66" rx="8" fill="#f6f8fa" stroke="#8c959f" stroke-width="1"/>
+  <text x="810" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2328">导出</text>
+  <text x="810" y="120" text-anchor="middle" font-size="11" fill="#57606a">CSV / Excel / PDF</text>
+
+  <g stroke="#8c959f" stroke-width="1.5" fill="none">
+    <path d="M176 105 L200 105"/>
+    <path d="M196 101 L200 105 L196 109"/>
+    <path d="M356 105 L380 105"/>
+    <path d="M376 101 L380 105 L376 109"/>
+    <path d="M536 105 L560 105"/>
+    <path d="M556 101 L560 105 L556 109"/>
+    <path d="M716 105 L740 105"/>
+    <path d="M736 101 L740 105 L736 109"/>
+  </g>
+
+  <text x="24" y="172" font-size="12" fill="#1a7f37">● 数据不出浏览器　● 不合格默认先由 HR 确认　● 决定明细保留 90 天，可按要求删除</text>
+  <text x="24" y="192" font-size="11" fill="#57606a">可选：AI 判断（默认关闭，发送前去标识）· 本机 RPA 助手（手动安装，仅监听 127.0.0.1）</text>
+</g>
+</svg>
